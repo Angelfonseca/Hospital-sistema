@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import db from './config/db';
 
-
+import objectsRoutes from './routes/objects.routes';
 import usersRoutes from './routes/users.routes';
 
 const app = express();
@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
   })
 
 app.use('/api/users', usersRoutes);
+app.use('/api/objects', objectsRoutes);
 
 interface IUserRequest extends express.Request {
     user: any
