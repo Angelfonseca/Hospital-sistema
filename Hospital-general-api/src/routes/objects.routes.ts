@@ -4,12 +4,13 @@ import ensureAuth from '../Middlewares/auth.middleware'
 
 const router = Router()
 
-router.get('/', ensureAuth, controller.getObjects)
-router.post('/', ensureAuth, controller.createObject)
-router.get('/:id', ensureAuth, controller.getObject)
-router.put('/:id', ensureAuth, controller.updateObject)
-router.delete('/:id', ensureAuth, controller.deleteObject)
-router.get('/responsable/:responsable', ensureAuth, controller.getObjectbyResponsable)
-router.get('/pdf/:responsable', ensureAuth, controller.createPDF)
+router.get('/',  controller.getObjects)
+router.post('/', controller.createObject)
+router.get('/:id',  controller.getObject)
+router.put('/:id',  controller.updateObject)
+router.delete('/:id',  controller.deleteObject)
+router.get('/pdf/:id',  controller.generatePDF)
+router.get('/responsable/:responsable',  controller.getObjectbyResponsable)
+router.get('/active',  controller.getObjectsWithFieldFalse)
 
 export default router

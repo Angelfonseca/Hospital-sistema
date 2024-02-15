@@ -56,6 +56,10 @@ const ObjectSchema = new Schema<Object>(
       consumible: {
         type: Boolean,
         required: true
+      },
+      activo: {
+        type: Boolean,
+        required: true,
       }
     },
     {
