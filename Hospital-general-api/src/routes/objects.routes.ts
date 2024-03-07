@@ -11,6 +11,7 @@ router.put('/:id',  controller.updateObject)
 router.delete('/:id',  controller.deleteObject)
 router.get('/pdf/:id',  controller.generatePDF)
 router.get('/responsable/:responsable',  controller.getObjectbyResponsable)
-router.get('/active',  controller.getObjectsWithFieldFalse)
+router.get('/code/:code',  controller.getObjectbyCode)
+router.post('/codes', controller.getObjectsByCode)
 
 export default router

@@ -6,6 +6,7 @@ import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import { table } from 'table';
 import path from 'path';
+import { error } from 'console';
 
 const getObjects = async (req: Request, res: Response) => {
   try {
@@ -60,10 +61,17 @@ const deleteObject = async (req: Request, res: Response) => {
 const getObjectbyResponsable = async (req: Request, res: Response) => {
   try {
     const responsable = req.params.responsable;
+
+    if (!responsable || typeof responsable !== 'string') {
+      return res.status(400).json({ error: 'Invalid responsable parameter' });
+    }
+
     const objects = await objectsService.getObjectbyResponsable(responsable);
+
     res.status(200).json(objects);
-  } catch (error: any) {
-    handleHttp(res, error, "Error getting objects by responsable");
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Error getting objects by responsable' });
   }
 };
 
@@ -80,44 +88,54 @@ const getObjectsWithFieldFalse = async (req: Request, res: Response) => {
 const generatePDF = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const data = await objectsService.getObjectbyResponsable(id);
 
-    const pdfDoc = new PDFDocument();
-    const filePath = 'output.pdf'; // Ruta relativa
-    pdfDoc.pipe(fs.createWriteStream(filePath));
+    if (!id || typeof id !== 'string') {
+      return res.status(400).json({ error: 'Invalid ID parameter' });
+    }
 
-    // Añadir el contenido al PDF
-    pdfDoc.font('Helvetica-Bold').fontSize(14).text('Reporte de objetos', { align: 'center' });
-    pdfDoc.moveDown(); // Bajar una línea
-    data.forEach((object: any) => {
-      pdfDoc.text(`Asignado: ${object.asignado}`);
-      pdfDoc.text(`Cve Cabms: ${object.cve_cabms}`);
-      pdfDoc.text(`Consecutivo: ${object.consecutivo}`);
-      pdfDoc.text(`Descripción: ${object.descrip_bm}`);
-      pdfDoc.text(`Costo: ${object.costo_bien}`);
-      pdfDoc.text(`Marca: ${object.marca}`);
-      pdfDoc.text(`Modelo: ${object.modelo}`);
-      pdfDoc.text(`Serie: ${object.serie}`);
-      pdfDoc.text(`Motor: ${object.motor || ''}`);
-      pdfDoc.text(`Descripción: ${object.descripcion || ''}`);
-      pdfDoc.text(`Recursos: ${object.recursos}`);
-      pdfDoc.text(`Responsable: ${object.responsable}`);
-      pdfDoc.moveDown(); // Bajar una línea
-    });
+    const pdfBuffer = await objectsService.generatePDF(id);
 
-    pdfDoc.end();
+    // Establecer encabezados para indicar que se enviará un archivo PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="output_${id}.pdf"`);
+    res.send(pdfBuffer); // Enviar el contenido del PDF directamente al cliente
 
-    // Obtener la ruta absoluta del archivo
-    const absolutePath = path.resolve(filePath);
-
-    res.setHeader('Content-Disposition', 'attachment; filename="output.pdf"');
-    res.sendFile(absolutePath); // Enviar el archivo con la ruta absoluta
-    console.log('PDF generado correctamente');
+    console.log('PDF generado y enviado correctamente');
   } catch (error: any) {
-    console.error('Error generating PDF:', error.message);
-    handleHttp(res, 500, 'Error generating PDF');
+    console.error('Error al generar y enviar el PDF:', error.message);
+    res.status(500).json({ error: 'Error al generar y enviar el PDF' });
   }
 };
+
+const getObjectbyCode = async (req: Request, res: Response) => {
+  try {
+    const code = req.params.code;
+    if (!code) {
+      return res.status(400).json({ error: 'Code parameter is required' });
+    }
+    const objects = await objectsService.getObjectbyCode(code);
+    return res.status(200).json(objects);
+  } catch (error: any) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'Error getting object by code' });
+  }
+}
+
+const getObjectsByCode = async (req: Request, res: Response) => {
+  try {
+    const codes = req.body.codes;
+
+    if (!Array.isArray(codes) || codes.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty codes array' });
+    }
+    
+    const objects = await objectsService.getObjectsByCode(codes);
+    return res.status(200).json(objects);
+  } catch (error: any) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 
 
 
@@ -132,4 +150,6 @@ export default {
   getObjectbyResponsable,
   getObjectsWithFieldFalse,
   generatePDF,
+  getObjectbyCode,
+  getObjectsByCode
 };

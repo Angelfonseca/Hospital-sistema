@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./app.ts",
+    "dev": "nodemon ./src/app.ts",
     "start": "node dist/app.js",
     "clean": "rimraf dist",
     "test": "jest",
@@ -34,12 +34,16 @@
     "pdfmake": "^0.2.9",
     "table": "^6.8.1",
     "ts-node": "^10.9.2",
-    "tty-table": "^4.2.3",
-    "typescript": "^5.3.3",
-    "xlsx": "^0.18.5"
+    "tty-table": "^4.2.3"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@types/pdfkit": "^0.13.3",
-    "@types/pdfmake": "^0.2.9"
+    "@types/pdfmake": "^0.2.9",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
   }
 }
