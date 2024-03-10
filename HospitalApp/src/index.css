@@ -1,0 +1,17 @@
+:root {
+ background-color: #039497;
+}
+
+html{
+    background-color: #039497;
+
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a{
+    text-decoration: none;
+    color: #000;
+}
