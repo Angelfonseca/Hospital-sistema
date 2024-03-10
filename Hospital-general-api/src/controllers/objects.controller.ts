@@ -1,12 +1,7 @@
 import { Request, Response } from 'express';
 import objectsService from '../services/objects.service';
 import { handleHttp } from "../utils/error.handle";
-import { Object } from '../interfaces/objects.interface';
-import PDFDocument from 'pdfkit';
-import fs from 'fs';
-import { table } from 'table';
-import path from 'path';
-import { error } from 'console';
+
 
 const getObjects = async (req: Request, res: Response) => {
   try {

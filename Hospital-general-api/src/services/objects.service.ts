@@ -1,7 +1,6 @@
-import { get } from "http";
+
 import { Object } from "../interfaces/objects.interface";
 import ObjectModel from "../models/object.model";
-import fs from 'fs';
 import PDFDocument from 'pdfkit';
 
 

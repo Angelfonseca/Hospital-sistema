@@ -4,13 +4,11 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import db from './config/db';
 import 'dotenv/config'
-
 import objectsRoutes from './routes/objects.routes';
 import usersRoutes from './routes/users.routes';
-import e from 'express';
 
 export const app = express();
-const port = process.env.PORT || 3000;
+
 app.disable('x-powered-by')
 app.use(cors())
 app.use(bodyParser.json({ limit: '50mb' }))
