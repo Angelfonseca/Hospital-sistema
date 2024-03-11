@@ -80,27 +80,25 @@ const getObjectsWithFieldFalse = async (req: Request, res: Response) => {
   }
 };
 
-const generatePDF = async (req: Request, res: Response) => {
+const generateExcel = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+    const excelBuffer = await objectsService.generateExcel(id);
 
-    if (!id || typeof id !== 'string') {
-      return res.status(400).json({ error: 'Invalid ID parameter' });
-    }
+    // Establecer los encabezados de la respuesta para indicar que se enviará un archivo Excel
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename="reporte.xlsx"');
 
-    const pdfBuffer = await objectsService.generatePDF(id);
+    // Enviar el contenido del archivo Excel como respuesta
+    res.send(excelBuffer);
 
-    // Establecer encabezados para indicar que se enviará un archivo PDF
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="output_${id}.pdf"`);
-    res.send(pdfBuffer); // Enviar el contenido del PDF directamente al cliente
-
-    console.log('PDF generado y enviado correctamente');
+    console.log('Archivo Excel generado y enviado correctamente');
   } catch (error: any) {
-    console.error('Error al generar y enviar el PDF:', error.message);
-    res.status(500).json({ error: 'Error al generar y enviar el PDF' });
+    console.error('Error al generar y enviar el archivo Excel:', error.message);
+    res.status(500).json({ error: 'Error al generar y enviar el archivo Excel' });
   }
 };
+
 
 const getObjectbyCode = async (req: Request, res: Response) => {
   try {
@@ -144,7 +142,7 @@ export default {
   deleteObject,
   getObjectbyResponsable,
   getObjectsWithFieldFalse,
-  generatePDF,
+  generateExcel,
   getObjectbyCode,
   getObjectsByCode
 };

@@ -34,7 +34,8 @@
     "pdfmake": "^0.2.9",
     "table": "^6.8.1",
     "ts-node": "^10.9.2",
-    "tty-table": "^4.2.3"
+    "tty-table": "^4.2.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
