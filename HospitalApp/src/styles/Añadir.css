@@ -1,0 +1,133 @@
+.ContainerFull_Add{
+    display: flex;
+    flex-direction: column;
+}
+
+.Con_Form_Add{
+    height: 80vh;
+    width: 150vh;
+    background-color: #ffffffcb;
+    border-radius: 10px;
+
+
+    -webkit-box-shadow: 0px 9px 18px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 9px 18px -1px rgba(0,0,0,0.75);
+    box-shadow: 0px 9px 18px -1px rgba(0,0,0,0.75);
+
+    display: grid;
+    grid-template: 
+    "Con_Search_Add" 10%
+    "Con_Inputs" auto
+    "Con_BTNAdd" 10%;
+}
+
+.Con_Search_Add{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.Con_Search_Add > div:nth-child(1){
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 5px;
+    gap: 10px;
+}
+
+.Con_Search_Add > div:nth-child(1) > img{
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 16/9;
+}
+
+
+.Con_Inputs_Add{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 10px;
+}
+
+.Con_Inputs_Add > div:nth-child(1){
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+.Con_Inputs_Add > div:nth-child(2){
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+.Con_Inputs_Add > div:nth-child(3){
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+.Con_Inputs_Add > div:nth-child(4){
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+.Con_Inputs_Add > div:nth-child(5){
+    display: flex;
+    flex-direction: column;
+}
+.Con_BTNAdd{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: end;
+    gap: 10px;
+    margin-right: 10px;
+}
+
+/* Botones  */
+#BTNAdd_Pro{
+    width: 150px;
+    height: 50px;
+
+    background-color: #28A745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+}
+
+#BTN_AddRegresar{
+    width: 100px;
+    height: 40px;
+
+    background-color: #6C757D;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+
+    margin-bottom: 5px;
+}
+
+/* Inputs */
+#Inputs_Add_Pro{
+    width: 300px;
+    height: 40px;
+    border: 1px #ADB5BD solid;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+#Input_AddDesc_Pro{
+    width: 637px;
+    height: 40px;
+    border: 1px #ADB5BD solid;
+    border-radius: 5px;
+    font-size: 20px;
+
+}
+
+#Add_Font18{
+    font-size: 18px;
+}
