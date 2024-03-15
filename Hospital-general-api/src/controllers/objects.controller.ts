@@ -80,15 +80,15 @@ const getObjectsWithFieldFalse = async (req: Request, res: Response) => {
   }
 };
 
-const generateExcel = async (req: Request, res: Response) => {
+const generateExcelbyResponsable = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const excelBuffer = await objectsService.generateExcel(id);
+    const excelBuffer = await objectsService.generateExcelbyResponsable(id);
 
     // Establecer los encabezados de la respuesta para indicar que se enviará un archivo Excel
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', 'attachment; filename="reporte.xlsx"');
-
+    res.setHeader('Content-Disposition', `attachment; filename="reporte_${id}.xlsx"`);
+    
     // Enviar el contenido del archivo Excel como respuesta
     res.send(excelBuffer);
 
@@ -98,6 +98,40 @@ const generateExcel = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error al generar y enviar el archivo Excel' });
   }
 };
+
+const generateExcelbyCodes = async (req: Request, res: Response) => {
+  try {
+    const codes = req.body.codes;
+    const excelBuffer = await objectsService.generateExcelbyCodes(codes);
+
+    // Establecer los encabezados de la respuesta para indicar que se enviará un archivo Excel
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="reporte.xlsx"`);
+    
+    // Enviar el contenido del archivo Excel como respuesta
+    res.send(excelBuffer);
+
+    console.log('Archivo Excel generado y enviado correctamente');
+  } catch (error: any) {
+    console.error('Error al generar y enviar el archivo Excel:', error.message);
+    res.status(500).json({ error: 'Error al generar y enviar el archivo Excel' });
+  }
+};
+
+const getObjectsByCode = async (req: Request, res: Response) => {
+  try {
+    const codes = req.body.codes;
+
+    if (!Array.isArray(codes) || codes.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty codes array' });
+    }
+    const objects = await objectsService.getObjectsByCode(codes);;
+    return res.status(200).json(objects);
+  } catch (error: any) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 
 
 const getObjectbyCode = async (req: Request, res: Response) => {
@@ -114,21 +148,7 @@ const getObjectbyCode = async (req: Request, res: Response) => {
   }
 }
 
-const getObjectsByCode = async (req: Request, res: Response) => {
-  try {
-    const codes = req.body.codes;
 
-    if (!Array.isArray(codes) || codes.length === 0) {
-      return res.status(400).json({ error: 'Invalid or empty codes array' });
-    }
-    
-    const objects = await objectsService.getObjectsByCode(codes);
-    return res.status(200).json(objects);
-  } catch (error: any) {
-    console.error('Error:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
 
 
 
@@ -142,7 +162,8 @@ export default {
   deleteObject,
   getObjectbyResponsable,
   getObjectsWithFieldFalse,
-  generateExcel,
+  generateExcelbyResponsable,
   getObjectbyCode,
-  getObjectsByCode
+  getObjectsByCode,
+  generateExcelbyCodes
 };
