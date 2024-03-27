@@ -39,8 +39,6 @@ export default function Añadir() {
       alert('Todos los campos son obligatorios');
       return;
     }
-    
-    console.log(import.meta.env.VITE_API_URL);
     await clienteAxios.post('/api/objects/', {asignado: asignado, cve_cabms:cve_cabms, consecutivo:consecutivo, descrip_bm:descrip_bm, costo_bien:costo_bien, marca:marca, modelo:modelo, serie:serie, motor:motor, descripcion:descripcion, recursos:recursos, responsable:responsable, ubicacion:ubicacion, consumible:consumible, activo:activo});
     alert('Producto añadido correctamente');
     // try {

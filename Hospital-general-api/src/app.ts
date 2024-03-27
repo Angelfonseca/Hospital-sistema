@@ -1,16 +1,22 @@
 import 'dotenv/config';
 import express from 'express';
-import cors from 'cors';
+// import cors from 'cors';
+const cors = require('cors');
 import bodyParser from 'body-parser';
 import db from './config/db';
 import 'dotenv/config'
 import objectsRoutes from './routes/objects.routes';
 import usersRoutes from './routes/users.routes';
 
+const corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200
+}
+
 export const app = express();
 
 app.disable('x-powered-by')
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use((req, res, next) => {
