@@ -11,7 +11,7 @@ import {Link} from 'react-router-dom'
 
 export default function Inicio() {
   return (
-    <div>
+    <div className="ContainerFull_Inicio">
       <div>
         <button id="BtnSalir">Salir</button>
       </div>
