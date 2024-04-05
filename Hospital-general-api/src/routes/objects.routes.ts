@@ -11,8 +11,8 @@ router.put('/:id',  controller.updateObject)
 router.delete('/:id',  controller.deleteObject)
 router.get('/xlsx/:id',  controller.generateExcelbyResponsable)
 router.get('/responsable/:responsable',  controller.getObjectbyResponsable)
-router.post('/xlsx/codes',  controller.generateExcelbyCodes)
-router.get('/code/:code',  controller.getObjectbyCode)
-router.post('/codes', controller.getObjectsByCode)
+router.post('/genxlsx/codes',  controller.generateExcelbyCodes)
+router.get('/codes/:code',  controller.getObjectbyCode)
+router.post('/responsable/update/codes',  controller.updateResponsableofObjects)
 
 export default router

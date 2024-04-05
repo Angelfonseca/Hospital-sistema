@@ -102,19 +102,21 @@ const generateExcelbyResponsable = async (req: Request, res: Response) => {
 const generateExcelbyCodes = async (req: Request, res: Response) => {
   try {
     const codes = req.body.codes;
+
+    if (!Array.isArray(codes) || codes.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty codes array' });
+    }
+
     const excelBuffer = await objectsService.generateExcelbyCodes(codes);
 
-    // Establecer los encabezados de la respuesta para indicar que se enviará un archivo Excel
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename="reporte.xlsx"`);
-    
-    // Enviar el contenido del archivo Excel como respuesta
+    res.setHeader('Content-Disposition', 'attachment; filename="reporte.xlsx"');
     res.send(excelBuffer);
 
     console.log('Archivo Excel generado y enviado correctamente');
   } catch (error: any) {
-    console.error('Error al generar y enviar el archivo Excel:', error.message);
-    res.status(500).json({ error: 'Error al generar y enviar el archivo Excel' });
+    handleHttp(res, error, "Error generating and sending the Excel file");
+    return new Error('Error al generar y enviar el archivo Excel');
   }
 };
 
@@ -148,6 +150,35 @@ const getObjectbyCode = async (req: Request, res: Response) => {
   }
 }
 
+const updateResponsableofObjects = async (req: Request, res: Response) => {
+  try {
+    const responsable = req.body.responsable;
+    const codes = req.body.codes;
+    if (!responsable || !Array.isArray(codes) || codes.length === 0) {
+      return res.status(400).json({ error: 'Invalid parameters' });
+    }
+    const updatedObjects = await objectsService.updateResponsableofObjects(codes, responsable);
+    return res.status(200).json(updatedObjects);
+  } catch (error: any) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'Error updating responsable of objects' });
+  }
+}
+
+const updateResponsableofObject = async (req: Request, res: Response) => {
+  try {
+    const responsable = req.body.responsable;
+    const code = req.body.code;
+    if (!responsable || !code) {
+      return res.status(400).json({ error: 'Invalid parameters' });
+    }
+    const updatedObject = await objectsService.updateResponsablewithCode(code, responsable);
+    return res.status(200).json(updatedObject);
+  } catch (error: any) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'Error updating responsable of object' });
+  }
+}
 
 
 
@@ -165,5 +196,7 @@ export default {
   generateExcelbyResponsable,
   getObjectbyCode,
   getObjectsByCode,
-  generateExcelbyCodes
+  generateExcelbyCodes,
+  updateResponsableofObjects,
+  updateResponsableofObject
 };

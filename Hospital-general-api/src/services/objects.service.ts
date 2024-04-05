@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx';
 const path = require('path');
 
 
+
 const getObjects = async () => {
   const objects = await ObjectModel.find();
   return objects;
@@ -114,13 +115,11 @@ const generateExcelbyResponsable = async (id: string): Promise<Buffer> => {
 };
 
 const generateExcelbyCodes = async (codes: string[]): Promise<Buffer> => {
-  if (!codes || codes.length === 0) {
-    throw new Error('Codes parameter is required');
-  }
   try {
     const wb = XLSX.utils.book_new();
     const objects = await getObjectsByCode(codes);
 
+    // Crear matriz para almacenar datos, incluyendo nombres de columnas
     const data: any[][] = [
       [
         'Asignado',
@@ -172,10 +171,12 @@ const generateExcelbyCodes = async (codes: string[]): Promise<Buffer> => {
     const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 
     return buffer;
-  } catch (error) {
+  
+  } catch (error: any) {
     throw new Error('Error al generar el archivo Excel');
+    console.log('Error al generar el archivo Excel:', error.message);
   }
-};
+}
 
 const getObjectsByCode = async (codes: string[]) => {
   try {
@@ -218,9 +219,74 @@ const getObjectbyCode = async (code: string) => {
   }
 }
 
+const getIdbyCode = async (code: string) => {
+  try {
+    if (!code) {
+      throw new Error('Code parameter is required');
+    }
+    const div1 = code.split('-')[1];
+    const div2 = code.split('-')[2];
+    const object = await ObjectModel.findOne({ cve_cabms: div1, consecutivo: div2 });
+    if (!object) {
+      throw new Error('Object not found');
+    }
+    return object._id; // Se retorna el ID del objeto encontrado
+  } catch (error) {
+    console.error('Error searching for objects:', error);
+    throw new Error('Error searching for objects');
+  }
+};
+
+// Función para obtener los IDs de objetos a partir de un array de códigos
+const getIdsbyCodes = async (codes: string[]) => {
+  try {
+    if (!codes || codes.length === 0) {
+      throw new Error('Codes parameter is required');
+    }
+    const promises = codes.map(code => getIdbyCode(code));
+    const ids = await Promise.all(promises);
+    return ids;
+  } catch (error) {
+    console.error('Error searching for objects:', error);
+    throw new Error('Error searching for objects');
+  }
+};
+
+// Función para actualizar el responsable de un objeto dado su ID
+const updateResponsablewithCode = async (id: string, responsable: string) => {
+  if (!id || !responsable) {
+    throw new Error('ID and responsable parameters are required');
+  }
+  try {
+    const object = await ObjectModel.findByIdAndUpdate(id, { responsable }, { new: true });
+    if (!object) {
+      throw new Error('Object not found');
+    }
+    return object;
+  } catch (error) {
+    console.error('Error updating object:', error);
+    throw new Error('Error updating object');
+  }
+};
+
+const updateResponsableofObjects = async (codes: string[], responsable: string) => {
+  try {
+    if (!codes || codes.length === 0) {
+      throw new Error('IDs parameter is required');
+    }
+    const ids = await getIdsbyCodes(codes);
+    const promises = ids.map(id => updateResponsablewithCode(id.toString(), responsable)); 
+    const objects = await Promise.all(promises);
+    return objects;
+  } catch (error) {
+    console.error('Error updating objects:', error);
+    throw new Error('Error updating objects');
+  }
+};
 
 
 
 
 
-export default { getObjects, createObject, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes };
+
+export default { getObjects, createObject, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode };
