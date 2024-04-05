@@ -25,8 +25,6 @@ export default function Añadir() {
   const [recursos, setRecurso] = useState('');
   const [responsable, setResponsable] = useState('');
   const [ubicacion, setArea] = useState('');
-  // const [consumible, setConsumible] = useState('');
-  // const [activo, setActivo] = useState('');
 
   var descripcion = 'Descripcion del bien';
   var consumible = true;
@@ -39,15 +37,15 @@ export default function Añadir() {
       alert('Todos los campos son obligatorios');
       return;
     }
-    await clienteAxios.post('/api/objects/', {asignado: asignado, cve_cabms:cve_cabms, consecutivo:consecutivo, descrip_bm:descrip_bm, costo_bien:costo_bien, marca:marca, modelo:modelo, serie:serie, motor:motor, descripcion:descripcion, recursos:recursos, responsable:responsable, ubicacion:ubicacion, consumible:consumible, activo:activo});
-    alert('Producto añadido correctamente');
-    // try {
-    //   e.preventDefault();
-    //   const response = await clienteAxios.post('/api/objects/', {asignado: asignado, cve_cabms:cve_cabms, consecutivo:consecutivo, descrip_bm:descrip_bm, costo_bien:costo_bien, marca:marca, modelo:modelo, serie:serie, motor:motor, descripcion:descripcion, recursos:recursos, responsable:responsable, ubicacion:ubicacion, consumible:consumible, activo:activo});
-    //   console.log(response);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    
+    try {
+      e.preventDefault();
+      const response = await await clienteAxios.post('/api/objects/', {asignado: asignado, cve_cabms:cve_cabms, consecutivo:consecutivo, descrip_bm:descrip_bm, costo_bien:costo_bien, marca:marca, modelo:modelo, serie:serie, motor:motor, descripcion:descripcion, recursos:recursos, responsable:responsable, ubicacion:ubicacion, consumible:consumible, activo:activo});
+      console.log(response);
+      alert('Producto añadido correctamente');
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -58,7 +56,7 @@ export default function Añadir() {
       <form className='Con_Form_Add' onSubmit={store}>
         <div className='Con_Search_Add'>
           <div>
-            <img src={AddIcon} alt="Add Icon" />
+            <img src={AddIcon} alt="Add Icon" id='Con_AddIcon'/>
             <h2 id='NoMargin'>Añadir un Producto</h2>
           </div>
         </div>
