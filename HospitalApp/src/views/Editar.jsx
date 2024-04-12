@@ -9,6 +9,7 @@ import '/src/styles/Editar.css';
 
 import { useState } from 'react';
 import clienteAxios from '/src/config/axios';
+import {useNavigate} from 'react-router-dom'; 
 
 export default function Editar() {
   const [Search, setSearch] = useState('');
@@ -26,6 +27,7 @@ export default function Editar() {
   const [responsable, setResponsable] = useState('');
   const [ubicacion, setArea] = useState('');
 
+  var Navegar = useNavigate();
 
   const getProductByID = async (e) => {
     e.preventDefault();
@@ -44,21 +46,50 @@ export default function Editar() {
     setArea(respuesta.data[0].ubicacion)
  }
 
+ const update = async (e) =>{
+  e.preventDefault();
+  
+  if(Search===null || Search==='' || Search===undefined || Search==="Search"){
+    alert('Campo de búsqueda vacío');
+    console.log('Hi'+Search)
+    return;
+  } else {
+    console.log('Hi'+Search)
+    await clienteAxios.put(`/api/objects/${Search}`,{
+      asignado: asignado,
+      cve_cabms: cve_cabms,
+      consecutivo: consecutivo,
+      descrip_bm: descrip_bm,
+      costo_bien: costo_bien,
+      marca: marca,
+      modelo: modelo,
+      serie: serie,
+      motor: motor,
+      recursos: recursos,
+      responsable: responsable,
+      ubicacion: ubicacion
+    })
+    // Navegar('/Menu/Plantas');
+  }
+
+
+}
+
   return (
     <div className='ContainerFull_Edit'>
       <div>
         <Link to="/"><button id='BTN_EditRegresar'>Regresar</button></Link>
       </div>
-      <form className='Con_Form'>
+      <form className='Con_Form' onSubmit={update}>
         <div className='Con_Search'>
           <div>
-            <img src={EditIcon} alt="Edit Icon" />
-            <h2 id='NoMargin'>Editar Producto</h2>
+            <img src={EditIcon} alt="Edit Icon" id='EditIcon'/>
+            <h2 id='NoMargin'>Editar un Producto</h2>
           </div>
           <div>
-            <p id='NoMargin'>Código:</p>
+            <p id='txtCode'>Código:</p>
             <input type="search" name="Search" id="Input_EditSearch_Pro" placeholder='Escane el código del producto que deseas editar' value={Search} onChange={(e)=>setSearch(e.target.value)}/>
-            <button onClick={getProductByID} >Buscar</button>
+            <button onClick={getProductByID} id='BTN_Buscar'>Buscar</button>
           </div>
         </div>
 

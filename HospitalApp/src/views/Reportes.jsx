@@ -1,17 +1,23 @@
+//Import Link para Rutear
 import {Link} from 'react-router-dom';
+import * as React from 'react';
 
 //Styles
 import '/src/styles/Reportes.css';
 
+import clienteAxios from '/src/config/axios';
 
 export default function Reportes() {
+
+  // var respuesta = await clienteAxios.get(`/api/responsable/`)
+
   return (
     <div className='Container_Reports'>
       <div>
-      <Link to="/"><button id='btnRegresarRep'>Regresar</button></Link>
+        <Link to="/"><button id='btnRegresarRep'>Regresar</button></Link>
       </div>
       <div>
-        <input type="text" id='SearchID'/>
+        <input type="text" id='SearchID' placeholder='Ingresa Código de Barras'/>
         <select name="" id="SelectGroup"></select>
       </div>
       <div>

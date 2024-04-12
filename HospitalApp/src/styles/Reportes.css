@@ -97,4 +97,9 @@ tbody{
     cursor: pointer;
     font-size: 20px;
     color: white;
-}	
+}
+
+/* ========== Desktop ========== */
+@media (min-width: 900px) {
+
+}
