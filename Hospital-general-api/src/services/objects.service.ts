@@ -3,6 +3,8 @@ import { Object } from "../interfaces/objects.interface";
 import ObjectModel from "../models/object.model";
 import * as XLSX from 'xlsx';
 const path = require('path');
+import mongoose from 'mongoose';
+
 
 
 
@@ -121,7 +123,7 @@ const generateExcelbyCodes = async (codes: string[]): Promise<Buffer> => {
 
     // Crear matriz para almacenar datos, incluyendo nombres de columnas
     const data: any[][] = [
-      [
+      [ 
         'Asignado',
         'Cve Cabms',
         'Consecutivo',
@@ -169,12 +171,13 @@ const generateExcelbyCodes = async (codes: string[]): Promise<Buffer> => {
 
     // Escribir el libro de trabajo en un buffer
     const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
-
+    console.log(objects)
     return buffer;
   
   } catch (error: any) {
-    throw new Error('Error al generar el archivo Excel');
     console.log('Error al generar el archivo Excel:', error.message);
+    throw new Error('Error al generar el archivo Excel');
+    
   }
 }
 
@@ -284,9 +287,50 @@ const updateResponsableofObjects = async (codes: string[], responsable: string) 
   }
 };
 
+const updateObjectbyCode = async (code: string, object: Object) => {
+  try {
+    if (!code) {
+      throw new Error('Code parameter is required');
+    }
+    const div1 = code.split('-')[1];
+    const div2 = code.split('-')[2];
+    const objectData = await ObjectModel.findOneAndUpdate({ cve_cabms: div1, consecutivo: div2 }, object, { new: true });
+    if (!objectData) {
+      throw new Error('Object not found');
+    }
+    return objectData;
+  } catch (error) {
+    console.error('Error updating object:', error);
+    throw new Error('Error updating object');
+  }
+};
 
+const updateObjectsbyCodes = async (codes: string[], object: Object) => {
+  try {
+    if (!codes || codes.length === 0) {
+      throw new Error('Codes parameter is required');
+    }
+    const promises = codes.map(code => updateObjectbyCode(code, object));
+    const objects = await Promise.all(promises);
+    return objects;
+  } catch (error) {
+    console.error('Error updating objects:', error);
+    throw new Error('Error updating objects');
+  }
+}
+const getResponsablesofObjects = async () => {
+  try {
+    const objects = await getObjects();
+    const responsables = objects.map(object => object.responsable);
+    const uniqueResponsables = Array.from(new Set(responsables));
+    for (let i = 0; i < uniqueResponsables.length; i++) {
+      uniqueResponsables[i] = encodeURIComponent(uniqueResponsables[i]);
+    }
+    return uniqueResponsables;
+  } catch (error) {
+    console.error('Error getting responsables:', error);
+    throw new Error('Error getting responsables');
+  }
+}
 
-
-
-
-export default { getObjects, createObject, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode };
+export default { getObjects, createObject, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse,getResponsablesofObjects, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode, updateObjectsbyCodes, updateObjectbyCode };

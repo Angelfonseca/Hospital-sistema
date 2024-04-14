@@ -9,6 +9,7 @@ const getObjects = async (req: Request, res: Response) => {
     res.status(200).json(objects);
   } catch (error: any) {
     handleHttp(res, error, "Error getting objects");
+    return new Error;
   }
 };
 
@@ -19,16 +20,21 @@ const createObject = async (req: Request, res: Response) => {
     res.status(201).json(newObject);
   } catch (error: any) {
     handleHttp(res, error, "Error creating object");
+    return new Error;
   }
 };
 
 const getObject = async (req: Request, res: Response) => {
+  if (!req.params.id) {
+    return res.status(400).json({ error: 'Id parameter is required' });
+  }
   try {
     const id = req.params.id;
     const object = await objectsService.getObject(id);
     res.status(200).json(object);
   } catch (error: any) {
     handleHttp(res, error, "Error getting object");
+    return new Error;
   }
 };
 
@@ -40,6 +46,7 @@ const updateObject = async (req: Request, res: Response) => {
     res.status(200).json(updatedObject);
   } catch (error: any) {
     handleHttp(res, error, "Error updating object");
+    return new Error;
   }
 };
 
@@ -112,6 +119,7 @@ const generateExcelbyCodes = async (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', 'attachment; filename="reporte.xlsx"');
     res.send(excelBuffer);
+   
 
     console.log('Archivo Excel generado y enviado correctamente');
   } catch (error: any) {
@@ -137,6 +145,9 @@ const getObjectsByCode = async (req: Request, res: Response) => {
 
 
 const getObjectbyCode = async (req: Request, res: Response) => {
+  if (!req.params.code) {
+    return res.status(400).json({ error: 'Code parameter is required' });
+  }
   try {
     const code = req.params.code;
     if (!code) {
@@ -180,10 +191,39 @@ const updateResponsableofObject = async (req: Request, res: Response) => {
   }
 }
 
+const updateObjectbyCode = async (req: Request, res: Response) => {
+  try {
+    const code = req.params.code;
+    const object = req.body;
+    const updatedObject = await objectsService.updateObjectbyCode(code, object);
+    res.status(200).json(updatedObject);
+  } catch (error: any) {
+    handleHttp(res, error, "Error updating object");
+    return new Error;
+  }
+}
 
+const updateObjectsbyCodes = async (req: Request, res: Response) => {
+  try {
+    const codes = req.body.codes;
+    const object = req.body.object;
+    const updatedObjects = await objectsService.updateObjectsbyCodes(codes, object);
+    res.status(200).json(updatedObjects);
+  } catch (error: any) {
+    handleHttp(res, error, "Error updating objects");
+    return new Error;
+  }
+}
 
-
-
+const getResponsablesofObjects = async (req: Request, res: Response) => {
+  try {
+    const responsables = await objectsService.getResponsablesofObjects();
+    res.status(200).json(responsables);
+  } catch (error: any) {
+    handleHttp(res, error, "Error getting responsables of objects");
+    return new Error;
+  }
+}
 
 export default {
   getObjects,
@@ -198,5 +238,8 @@ export default {
   getObjectsByCode,
   generateExcelbyCodes,
   updateResponsableofObjects,
-  updateResponsableofObject
+  updateResponsableofObject,
+  updateObjectbyCode,
+  updateObjectsbyCodes,
+  getResponsablesofObjects
 };
