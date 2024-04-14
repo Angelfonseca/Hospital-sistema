@@ -37,6 +37,15 @@
 }
 
 /* Botones  */
+.Con_BTNAdd{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+
+    margin: 10px 0px;
+}
+
 #BTNAdd_Pro{
     width: 150px;
     height: 50px;
@@ -78,16 +87,12 @@
     border: 1px #ADB5BD solid;
     border-radius: 5px;
     font-size: 20px;
-
 }
 
-.Con_BTNAdd{
-    display: flex;
-    flex-direction: row;
-
-    justify-content: center;
-
-    margin: 10px 0px;
+/*Quitar Margin al titulo*/
+#NoMargin{
+    font-size: 38px;
+    margin: 0px 30px;
 }
 
 #Add_Font18{
@@ -98,9 +103,7 @@
     display: none;
 }
 
-#NoMargin{
-    margin: 0px 30px;
-}
+
 
 
 /* ========== Tablet ========== */
