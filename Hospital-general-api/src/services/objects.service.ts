@@ -323,9 +323,6 @@ const getResponsablesofObjects = async () => {
     const objects = await getObjects();
     const responsables = objects.map(object => object.responsable);
     const uniqueResponsables = Array.from(new Set(responsables));
-    for (let i = 0; i < uniqueResponsables.length; i++) {
-      uniqueResponsables[i] = encodeURIComponent(uniqueResponsables[i]);
-    }
     return uniqueResponsables;
   } catch (error) {
     console.error('Error getting responsables:', error);
@@ -333,4 +330,43 @@ const getResponsablesofObjects = async () => {
   }
 }
 
-export default { getObjects, createObject, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse,getResponsablesofObjects, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode, updateObjectsbyCodes, updateObjectbyCode };
+const getUbicacionesofObjects = async () => {
+  try {
+    const objects = await getObjects();
+    const ubicaciones = objects.map(object => object.ubicacion);
+
+    // Normalizar las ubicaciones eliminando espacios adicionales y caracteres no deseados
+    const normalizedUbicaciones = ubicaciones.map(ubicacion => {
+      const trimmedUbicacion = ubicacion.trim();
+      const cleanedString = trimmedUbicacion.replace(/\s+/g, ' ');
+      return cleanedString.toUpperCase(); // Convertir a mayúsculas para hacer la comparación más consistente
+    });
+
+    // Eliminar duplicados
+    const uniqueNormalizedUbicaciones = Array.from(new Set(normalizedUbicaciones));
+
+    return uniqueNormalizedUbicaciones;
+  } catch (error) {
+    console.error('Error getting ubicaciones:', error);
+    throw new Error('Error getting ubicaciones');
+  }
+}
+
+const getObjectsfromUbicacion = async (ubicacion: string) => {
+  try {
+    const decodedUbicacion = decodeURIComponent(ubicacion);
+    const regex = new RegExp(decodedUbicacion, 'i');
+    const objects = await ObjectModel.find({ ubicacion: { $regex: regex } });
+
+    if (!objects || objects.length === 0) {
+      throw new Error('Objects not found for the specified responsible');
+    }
+
+    return objects;
+  } catch (error) {
+    throw new Error('Error retrieving objects by responsible');
+  }
+};
+
+
+export default { getObjects, createObject,getObjectsfromUbicacion, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse,getResponsablesofObjects, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode, updateObjectsbyCodes, updateObjectbyCode, getUbicacionesofObjects};

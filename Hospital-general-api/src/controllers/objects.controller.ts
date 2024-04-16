@@ -225,6 +225,30 @@ const getResponsablesofObjects = async (req: Request, res: Response) => {
   }
 }
 
+const getUbicacionesofObjects = async (req: Request, res: Response) => {
+  try {
+    const ubicaciones = await objectsService.getUbicacionesofObjects();
+    res.status(200).json(ubicaciones);
+  } catch (error: any) {
+    handleHttp(res, error, "Error getting ubicaciones of objects");
+    return new Error;
+  }
+}
+
+const getObjectsfromUbicacion = async (req: Request, res: Response) => {
+  if (!req.params.ubicacion) {
+    return res.status(400).json({ error: 'Ubicacion parameter is required' });
+  }
+  try {
+    const ubicacion = req.params.ubicacion;
+    const objects = await objectsService.getObjectsfromUbicacion(ubicacion);
+    res.status(200).json(objects);
+  } catch (error: any) {
+    handleHttp(res, error, "Error getting objects from ubicacion");
+    return new Error;
+  }
+}
+
 export default {
   getObjects,
   createObject,
@@ -241,5 +265,7 @@ export default {
   updateResponsableofObject,
   updateObjectbyCode,
   updateObjectsbyCodes,
-  getResponsablesofObjects
+  getResponsablesofObjects,
+  getUbicacionesofObjects,
+  getObjectsfromUbicacion
 };
