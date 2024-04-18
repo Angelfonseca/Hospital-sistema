@@ -18,5 +18,8 @@ router.get('/responsables', controller.getResponsablesofObjects)
 router.get('/crud/:code', controller.getObjectbyCode)
 router.get('/ubicaciones', controller.getUbicacionesofObjects)
 router.get('/ubicacion/:ubicacion', controller.getObjectsfromUbicacion)
-
+router.put('/crud/:code', controller.updateObjectbyCode)
+router.post('/update/codes', controller.updateObjectsbyCodes)
+router.get('/responsables', controller.getResponsablesofObjects)
+router.get('/crud/:code', controller.getObjectbyCode)
 export default router

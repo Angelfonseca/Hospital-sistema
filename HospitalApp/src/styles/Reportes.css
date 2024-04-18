@@ -34,6 +34,9 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+
+    color: black;
+    gap: 10px;
 }
 
 /* Input de búsqueda */
@@ -46,7 +49,7 @@
 }
 
 /* Select de grupo */
-#SelectGroup{
+.Selector{
     width: 24%;
     height: 40px;
     border: 1px #ADB5BD solid;

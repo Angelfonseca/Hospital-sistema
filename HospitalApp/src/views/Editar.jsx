@@ -1,5 +1,7 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as React from 'react';
+import { useState } from 'react';
+import clienteAxios from '/src/config/axios';
 
 //Images
 import EditIcon from '/src/assets/Edit_Icon.png';
@@ -7,9 +9,7 @@ import EditIcon from '/src/assets/Edit_Icon.png';
 //Styles
 import '/src/styles/Editar.css';
 
-import { useState } from 'react';
-import clienteAxios from '/src/config/axios';
-import {useNavigate} from 'react-router-dom'; 
+
 
 export default function Editar() {
   const [Search, setSearch] = useState('');
@@ -22,13 +22,12 @@ export default function Editar() {
   const [modelo, setModelo] = useState('');
   const [serie, setSerie] = useState('');
   const [motor, setMotor] = useState('');
-  // const [descripcion, setDescripcion] = useState('');
   const [recursos, setRecurso] = useState('');
   const [responsable, setResponsable] = useState('');
   const [ubicacion, setArea] = useState('');
+  var [consumible, setConsumible] = useState(false);
 
-  var Navegar = useNavigate();
-
+  //Obtener producto por ID
   const getProductByID = async (e) => {
     e.preventDefault();
     const respuesta = await clienteAxios.get(`/api/objects/codes/${Search}`)
@@ -44,18 +43,45 @@ export default function Editar() {
     setRecurso(respuesta.data[0].recursos)
     setResponsable(respuesta.data[0].responsable)
     setArea(respuesta.data[0].ubicacion)
- }
+    setConsumible(respuesta.data[0].consumible)
 
- const update = async (e) =>{
-  e.preventDefault();
-  
-  if(Search===null || Search==='' || Search===undefined || Search==="Search"){
-    alert('Campo de búsqueda vacío');
-    console.log('Hi'+Search)
-    return;
-  } else {
-    console.log('Hi'+Search)
-    await clienteAxios.put(`/api/objects/${Search}`,{
+    //Validar si el producto está activo
+    if (respuesta.data[0].activo === false) {
+      alert('El producto que intentas editar se encuentra desactivado');
+      setSearch('');
+      setAsignado('');
+      setClave('');
+      setConsecutivo('');
+      setDescripcionBm('');
+      setCosto('');
+      setMarca('');
+      setModelo('');
+      setSerie('');
+      setMotor('');
+      setRecurso('');
+      setResponsable('');
+      setArea('');
+    }
+
+    //Validar si el producto es consumible
+    if (respuesta.data[0].consumible === true) {
+      setConsumible(true);
+      CB_Consumible.checked = true;
+    }
+  }
+
+  //Actualizar producto
+  const update = async (e) => {
+    e.preventDefault();
+
+    if(CB_Consumible.checked === true){
+      consumible = true;
+    }
+    if(CB_Consumible.checked === false){
+      consumible = false;
+    }
+
+    await clienteAxios.put(`/api/objects/crud/${Search}`, {
       asignado: asignado,
       cve_cabms: cve_cabms,
       consecutivo: consecutivo,
@@ -67,13 +93,52 @@ export default function Editar() {
       motor: motor,
       recursos: recursos,
       responsable: responsable,
-      ubicacion: ubicacion
+      ubicacion: ubicacion,
+      consumible: consumible
     })
-    // Navegar('/Menu/Plantas');
+    //Alerta de producto actualizado
+    alert('Producto actualizado correctamente');
+
+    //Limpiar campos
+    setSearch('');
+    setAsignado('');
+    setClave('');
+    setConsecutivo('');
+    setDescripcionBm('');
+    setCosto('');
+    setMarca('');
+    setModelo('');
+    setSerie('');
+    setMotor('');
+    setRecurso('');
+    setResponsable('');
+    setArea('');
+    setConsumible(false);
+    CB_Consumible.checked = false;
   }
 
+  const deleteProduct = async (e) => {
+    e.preventDefault();
+    await clienteAxios.put(`/api/objects/crud/${Search}`, {
+      activo: false
+    })
+    alert('Producto eliminado correctamente');
 
-}
+    //Limpiar campos
+    setSearch('');
+    setAsignado('');
+    setClave('');
+    setConsecutivo('');
+    setDescripcionBm('');
+    setCosto('');
+    setMarca('');
+    setModelo('');
+    setSerie('');
+    setMotor('');
+    setRecurso('');
+    setResponsable('');
+    setArea('');
+  }
 
   return (
     <div className='ContainerFull_Edit'>
@@ -83,12 +148,12 @@ export default function Editar() {
       <form className='Con_Form' onSubmit={update}>
         <div className='Con_Search'>
           <div>
-            <img src={EditIcon} alt="Edit Icon" id='EditIcon'/>
+            <img src={EditIcon} alt="Edit Icon" id='EditIcon' />
             <h2 id='NoMargin'>Editar un Producto</h2>
           </div>
           <div>
             <p id='txtCode'>Código:</p>
-            <input type="search" name="Search" id="Input_EditSearch_Pro" placeholder='Escane el código del producto que deseas editar' value={Search} onChange={(e)=>setSearch(e.target.value)}/>
+            <input type="search" name="Search" id="Input_EditSearch_Pro" placeholder='Escane el código del producto que deseas editar' value={Search} onChange={(e) => setSearch(e.target.value)} />
             <button onClick={getProductByID} id='BTN_Buscar'>Buscar</button>
           </div>
         </div>
@@ -98,41 +163,41 @@ export default function Editar() {
           <div>
             <div>
               <p id='Edit_Font18'>Asignado:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Asignado de HPGA' value={asignado} onChange={(e)=>setAsignado(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Asignado de HPGA' value={asignado} onChange={(e) => setAsignado(e.target.value)} />
             </div>
             <div>
               <p id='Edit_Font18'>Clave Cabms:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Clave Cabms (Nombre)' value={cve_cabms} onChange={(e)=>setClave(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Clave Cabms (Nombre)' value={cve_cabms} onChange={(e) => setClave(e.target.value)} />
             </div>
             <div>
               <p id='Edit_Font18'>Cosecutivo:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Consecutivo (Apellido)' value={consecutivo} onChange={(e)=>setConsecutivo(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Consecutivo (Apellido)' value={consecutivo} onChange={(e) => setConsecutivo(e.target.value)} />
             </div>
           </div>
 
           <div>
             <div>
               <p id='Edit_Font18'>Descripción:</p>
-              <input type="text" name="" id="Input_EditDesc_Pro" placeholder='Descripción detallada del producto' value={descrip_bm} onChange={(e)=>setDescripcionBm(e.target.value)}/>
+              <input type="text" name="" id="Input_EditDesc_Pro" placeholder='Descripción detallada del producto' value={descrip_bm} onChange={(e) => setDescripcionBm(e.target.value)} />
             </div>
             <div>
               <p id='Edit_Font18'>Costo:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Valor del bien' value={costo_bien} onChange={(e)=>setCosto(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Valor del bien' value={costo_bien} onChange={(e) => setCosto(e.target.value)} />
             </div>
           </div>
 
           <div>
             <div>
               <p id='Edit_Font18'>Marca:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Marca' value={marca} onChange={(e)=>setMarca(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Marca' value={marca} onChange={(e) => setMarca(e.target.value)} />
             </div>
             <div>
               <p id='Edit_Font18'>Modelo:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Modelo' value={modelo} onChange={(e)=>setModelo(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Modelo' value={modelo} onChange={(e) => setModelo(e.target.value)} />
             </div>
             <div>
               <p id='Edit_Font18'>Serie:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Serie' value={serie} onChange={(e)=>setSerie(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Serie' value={serie} onChange={(e) => setSerie(e.target.value)} />
             </div>
           </div>
 
@@ -140,28 +205,34 @@ export default function Editar() {
           <div>
             <div>
               <p id='Edit_Font18'>Motor:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Motor' value={motor} onChange={(e)=>setMotor(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Motor' value={motor} onChange={(e) => setMotor(e.target.value)} />
             </div>
             <div>
               <p id='Edit_Font18'>Recurso:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Recurso' value={recursos} onChange={(e)=>setRecurso(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Recurso' value={recursos} onChange={(e) => setRecurso(e.target.value)} />
             </div>
             <div>
               <p id='Edit_Font18'>Responsable:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Responsable' value={responsable} onChange={(e)=>setResponsable(e.target.value)}/>
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Responsable' value={responsable} onChange={(e) => setResponsable(e.target.value)} />
             </div>
           </div>
 
           <div>
-            <p id='Edit_Font18'>Área o Ubicación</p>
-            <input type="text" name="" id="Inputs_Edit_Pro"  placeholder='Área-Ubicación del bien' value={ubicacion} onChange={(e)=>setArea(e.target.value)}/>
+            <div>
+              <p id='Edit_Font18'>Área o Ubicación</p>
+              <input type="text" id="Inputs_Edit_Pro" placeholder='Área-Ubicación del bien' value={ubicacion} onChange={(e) => setArea(e.target.value)} />
+            </div>
+            <div className='Con_Check'>
+              <label htmlFor="CB_Consumible">¿Es un consumible?</label>
+              <input type="checkbox" id="CB_Consumible" value={consumible} onChange={(e) => setConsumible(e.target.value)} />
+            </div>
           </div>
-          
+
         </div>
 
         <div className='Con_BTNEdit'>
-            <button type='submit' id='BTNDelete_Pro'>Eliminar</button>
-            <button type='submit' id='BTNEdit_Pro'>Guardar</button>
+          <button onClick={deleteProduct} id='BTNDelete_Pro'>Eliminar</button>
+          <button type='submit' id='BTNEdit_Pro'>Guardar</button>
         </div>
 
       </form>

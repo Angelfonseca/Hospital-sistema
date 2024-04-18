@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
 
-    margin-top: 700px;
+    margin-top: 800px;
 }
 
 .Con_Form{
@@ -116,6 +116,24 @@
     color: white;
 }
 
+/* CheckBox */
+.Con_Check{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 30px;
+}
+
+.Con_Check label{
+    font-size: 18px;
+}
+
+#CB_Consumible{
+    width: 20px;
+    height: 20px;
+}
 
 /* Inputs */
 #Input_EditSearch_Pro{
@@ -245,6 +263,7 @@
     }
     
     .Con_Inputs > div:nth-child(1){
+        margin-top: 10px;
         display: flex;
         flex-direction: row;
         gap: 30px;
@@ -266,8 +285,27 @@
     }
     .Con_Inputs > div:nth-child(5){
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
     }
+
+    .Con_Check{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: space-evenly;
+        align-items: center;
+        padding-left: 30px;
+    }
+
+    .Con_Check label{
+        font-size: 18px;
+    }
+
+    #CB_Consumible{
+        width: 20px;
+        height: 20px;
+    }
+
     .Con_BTNEdit{
         display: flex;
         flex-direction: row;

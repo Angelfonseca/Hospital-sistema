@@ -1,6 +1,7 @@
 //Import Link para Rutear
 import {Link} from 'react-router-dom';
 import * as React from 'react';
+import { useEffect,useState } from 'react';
 
 //Styles
 import '/src/styles/Reportes.css';
@@ -8,8 +9,16 @@ import '/src/styles/Reportes.css';
 import clienteAxios from '/src/config/axios';
 
 export default function Reportes() {
+  var [responsables, setResponsables] = useState([]);
 
-  // var respuesta = await clienteAxios.get(`/api/responsable/`)
+  useEffect(() => {
+    //Obtener Responsables
+    const ObtenerResponsables = async () => {
+      var respuesta = await clienteAxios.get(`/api/objects/responsables`)
+      setResponsables(respuesta.data)
+    }
+    ObtenerResponsables() 
+  })
 
   return (
     <div className='Container_Reports'>
@@ -18,7 +27,12 @@ export default function Reportes() {
       </div>
       <div>
         <input type="text" id='SearchID' placeholder='Ingresa Código de Barras'/>
-        <select name="" id="SelectGroup"></select>
+        <select name="" className='Selector' id="SelectResponsable">
+          {responsables.map((responsable) => (
+            <option value={responsable.id}>{responsable}</option>
+          ))}
+        </select>
+        <select name="" className='Selector' id="SelectArea"></select>
       </div>
       <div>
         <table id='TableProducts'>

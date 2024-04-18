@@ -1,13 +1,12 @@
 import {Link} from 'react-router-dom';
+import clienteAxios from '/src/config/axios';
+import { useState } from 'react';
 
 //Images
 import AddIcon from '/src/assets/Add_Icon.png';
 
 //Styles
 import '/src/styles/Añadir.css';
-
-import clienteAxios from '/src/config/axios';
-import { useState } from 'react';
 
 export default function Añadir() {
 
@@ -40,7 +39,7 @@ export default function Añadir() {
     
     try {
       e.preventDefault();
-      const response = await await clienteAxios.post('/api/objects/', {asignado: asignado, cve_cabms:cve_cabms, consecutivo:consecutivo, descrip_bm:descrip_bm, costo_bien:costo_bien, marca:marca, modelo:modelo, serie:serie, motor:motor, descripcion:descripcion, recursos:recursos, responsable:responsable, ubicacion:ubicacion, consumible:consumible, activo:activo});
+      const response = await await clienteAxios.post('/api/objects/crud/', {asignado: asignado, cve_cabms:cve_cabms, consecutivo:consecutivo, descrip_bm:descrip_bm, costo_bien:costo_bien, marca:marca, modelo:modelo, serie:serie, motor:motor, descripcion:descripcion, recursos:recursos, responsable:responsable, ubicacion:ubicacion, consumible:consumible, activo:activo});
       console.log(response);
       alert('Producto añadido correctamente');
     } catch (error) {
@@ -121,8 +120,14 @@ export default function Añadir() {
           </div>
 
           <div>
-            <p id='Add_Font18'>Área o Ubicación</p>
-            <input type="text" name="" id="Inputs_Add_Pro"  placeholder='Área-Ubicación del bien' value={ubicacion} onChange={(e)=>setArea(e.target.value)}/>
+            <div>
+              <p id='Add_Font18'>Área o Ubicación</p>
+              <input type="text" name="" id="Inputs_Add_Pro"  placeholder='Área-Ubicación del bien' value={ubicacion} onChange={(e)=>setArea(e.target.value)}/>
+            </div>
+            <div className='Con_CheckBoxAdd'>
+              <label htmlFor="CB_ConsumibleAdd">¿Es un consumible?</label>
+              <input type="checkbox" id="CB_ConsumibleAdd" value={consumible} onChange={(e) => setConsumible(e.target.value)} />
+            </div>
           </div>
           
         </div>
