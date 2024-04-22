@@ -109,6 +109,7 @@ const generateExcelbyResponsable = async (id: string): Promise<Buffer> => {
 
     // Escribir el libro de trabajo en un buffer
     const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+    console.log('buffer')
 
     return buffer;
   } catch (error) {
@@ -120,6 +121,8 @@ const generateExcelbyCodes = async (codes: string[]): Promise<Buffer> => {
   try {
     const wb = XLSX.utils.book_new();
     const objects = await getObjectsByCode(codes);
+    console.log('inicvio de la funcion')
+    console.log(objects[0])
 
     // Crear matriz para almacenar datos, incluyendo nombres de columnas
     const data: any[][] = [
@@ -171,7 +174,7 @@ const generateExcelbyCodes = async (codes: string[]): Promise<Buffer> => {
 
     // Escribir el libro de trabajo en un buffer
     const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
-    console.log(objects)
+    // console.log(objects)
     return buffer;
   
   } catch (error: any) {
@@ -182,17 +185,21 @@ const generateExcelbyCodes = async (codes: string[]): Promise<Buffer> => {
 }
 
 const getObjectsByCode = async (codes: string[]) => {
-  try {
+try {
     if (!codes || codes.length === 0) {
-      console.log('Codes parameter is required')
-      throw new Error('Codes parameter is required');
+        console.log('Codes parameter is required')
+        throw new Error('Codes parameter is required');
     }
 
-    const promises = codes.map(code => getObjectbyCode(code));
-    const objects = await Promise.all(promises);
-
-    return objects;
-  } catch (error) {
+    let codesData: any[] = []; // Explicitly define the type of codesData as an array of any type
+    for (let index = 0; index < codes.length; index++) {
+        const code = codes[index];
+        const data = await getObjectbyCode(code);
+        codesData.push(data[0]);
+    }
+    let response = [].concat(...codesData);
+    return response;
+} catch (error) {
     console.error('Error searching for objects:', error);
     throw new Error('Error searching for objects');
   }
@@ -223,23 +230,27 @@ const getObjectbyCode = async (code: string) => {
 }
 
 const getIdbyCode = async (code: string) => {
-  try {
-    if (!code) {
-      throw new Error('Code parameter is required');
+    try {
+      if (!code || typeof code !== 'string') { // Verificar si code es null, undefined o no es una cadena
+        throw new Error('Code parameter is required and must be a string');
+      }
+      const parts = code.split('-');
+      if (parts.length < 3) { // Verificar que el código tenga al menos 3 partes divididas por '-'
+        throw new Error('Invalid code format');
+      }
+      const div1 = parts[1];
+      const div2 = parts[2];
+      const object = await ObjectModel.findOne({ cve_cabms: div1, consecutivo: div2 });
+      if (!object) {
+        throw new Error('Object not found');
+      }
+      return object._id; // Se retorna el ID del objeto encontrado
+    } catch (error) {
+      console.error('Error searching for objects:', error);
+      throw new Error('Error searching for objects');
     }
-    const div1 = code.split('-')[1];
-    const div2 = code.split('-')[2];
-    const object = await ObjectModel.findOne({ cve_cabms: div1, consecutivo: div2 });
-    if (!object) {
-      throw new Error('Object not found');
-    }
-    return object._id; // Se retorna el ID del objeto encontrado
-  } catch (error) {
-    console.error('Error searching for objects:', error);
-    throw new Error('Error searching for objects');
-  }
-};
-
+  };
+  
 // Función para obtener los IDs de objetos a partir de un array de códigos
 const getIdsbyCodes = async (codes: string[]) => {
   try {
@@ -368,5 +379,35 @@ const getObjectsfromUbicacion = async (ubicacion: string) => {
   }
 };
 
+const updateUbicacionwithCode = async (id: string, ubicacion: string) => {
+    if (!id || !ubicacion) {
+        throw new Error('ID and ubicacion parameters are required');
+      }
+      try {
+        const object = await ObjectModel.findByIdAndUpdate(id, { ubicacion }, { new: true });
+        if (!object) {
+          throw new Error('Object not found');
+        }
+        return object;
+      } catch (error) {
+        console.error('Error updating object:', error);
+        throw new Error('Error updating object');
+      }
+    };
+  
+  const updateUbicacionofObjects = async (codes: string[], ubicacion: string) => {
+    try {
+        if (!codes || codes.length === 0) {
+          throw new Error('IDs parameter is required');
+        }
+        const ids = await getIdsbyCodes(codes);
+        const promises = ids.map(id => updateUbicacionwithCode(id.toString(), ubicacion)); 
+        const objects = await Promise.all(promises);
+        return objects;
+      } catch (error) {
+        console.error('Error updating objects:', error);
+        throw new Error('Error updating objects');
+      }
+    };
 
-export default { getObjects, createObject,getObjectsfromUbicacion, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse,getResponsablesofObjects, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode, updateObjectsbyCodes, updateObjectbyCode, getUbicacionesofObjects};
+export default { getObjects,updateUbicacionofObjects , createObject,getObjectsfromUbicacion, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse,getResponsablesofObjects, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode, updateObjectsbyCodes, updateObjectbyCode, getUbicacionesofObjects};

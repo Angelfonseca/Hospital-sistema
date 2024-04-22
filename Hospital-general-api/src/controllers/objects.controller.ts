@@ -249,6 +249,22 @@ const getObjectsfromUbicacion = async (req: Request, res: Response) => {
   }
 }
 
+const updateUbicationofObject = async (req: Request, res: Response) => {
+  try {
+    const codes = [req.body.codes];
+    const ubicacion = req.body.ubicacion;
+    if (!codes || !ubicacion) {
+      return res.status(400).json({ error: 'Invalid parameters' });
+    }
+    const updatedObject = await objectsService.updateUbicacionofObjects(codes, ubicacion);
+    return res.status(200).json(updatedObject);
+  } catch (error: any) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'Error updating ubicacion of object' });
+  }
+}
+
+
 export default {
   getObjects,
   createObject,
@@ -267,5 +283,6 @@ export default {
   updateObjectsbyCodes,
   getResponsablesofObjects,
   getUbicacionesofObjects,
-  getObjectsfromUbicacion
+  getObjectsfromUbicacion,
+  updateUbicationofObject
 };
