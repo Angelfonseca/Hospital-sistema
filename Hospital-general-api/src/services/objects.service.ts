@@ -253,18 +253,25 @@ const getIdbyCode = async (code: string) => {
   
 // Función para obtener los IDs de objetos a partir de un array de códigos
 const getIdsbyCodes = async (codes: string[]) => {
+  let objectsIds: any[] = [];
   try {
     if (!codes || codes.length === 0) {
       throw new Error('Codes parameter is required');
     }
-    const promises = codes.map(code => getIdbyCode(code));
-    const ids = await Promise.all(promises);
-    return ids;
+    for (let index = 0; index < codes.length; index++) {
+      const code = codes[index];
+      if (typeof code !== 'string' || code.trim() === '') {
+        throw new Error('Invalid code format');
+      }
+      const id = await getIdbyCode(code);
+      objectsIds.push(id);
+    }
+    return objectsIds;
   } catch (error) {
-    console.error('Error searching for objects:', error);
     throw new Error('Error searching for objects');
   }
-};
+}
+
 
 // Función para actualizar el responsable de un objeto dado su ID
 const updateResponsablewithCode = async (id: string, responsable: string) => {
@@ -300,8 +307,8 @@ const updateResponsableofObjects = async (codes: string[], responsable: string) 
 
 const updateObjectbyCode = async (code: string, object: Object) => {
   try {
-    if (!code) {
-      throw new Error('Code parameter is required');
+    if (!code || typeof code !== 'string') {
+      throw new Error('Code parameter is required and must be a string');
     }
     const div1 = code.split('-')[1];
     const div2 = code.split('-')[2];
@@ -380,34 +387,29 @@ const getObjectsfromUbicacion = async (ubicacion: string) => {
 };
 
 const updateUbicacionwithCode = async (id: string, ubicacion: string) => {
-    if (!id || !ubicacion) {
-        throw new Error('ID and ubicacion parameters are required');
-      }
-      try {
-        const object = await ObjectModel.findByIdAndUpdate(id, { ubicacion }, { new: true });
-        if (!object) {
-          throw new Error('Object not found');
-        }
-        return object;
-      } catch (error) {
-        console.error('Error updating object:', error);
-        throw new Error('Error updating object');
-      }
-    };
-  
-  const updateUbicacionofObjects = async (codes: string[], ubicacion: string) => {
-    try {
-        if (!codes || codes.length === 0) {
-          throw new Error('IDs parameter is required');
-        }
-        const ids = await getIdsbyCodes(codes);
-        const promises = ids.map(id => updateUbicacionwithCode(id.toString(), ubicacion)); 
-        const objects = await Promise.all(promises);
-        return objects;
-      } catch (error) {
-        console.error('Error updating objects:', error);
-        throw new Error('Error updating objects');
-      }
-    };
+  if (!id || !ubicacion) throw new Error('ID and ubicacion parameters are required');
+  try {
+    const object = await ObjectModel.findByIdAndUpdate(id, { ubicacion }, { new: true });
+    if (!object) throw new Error('Object not found');
+    return object;
+  } catch (error) {
+    console.error('Error updating objects:', error);
+    throw new Error('Error updating objects');
+  }
+};
 
-export default { getObjects,updateUbicacionofObjects , createObject,getObjectsfromUbicacion, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse,getResponsablesofObjects, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode, updateObjectsbyCodes, updateObjectbyCode, getUbicacionesofObjects};
+const updateUbicacionofObjects = async (codes: string[], ubicacion: string) => {
+  try {
+    if (!codes || codes.length === 0) throw new Error('Codes parameter is required');
+    const ids = await getIdsbyCodes(codes);
+    if (!ids || ids.length === 0) throw new Error('No valid IDs found for the given codes');
+    const objects = await Promise.all(ids.map(id => updateUbicacionwithCode(id.toString(), ubicacion)));
+    console.log('Updated objects:', objects); // Log the updated objects
+    return objects.filter(obj => obj !== null);
+  } catch (error) {
+    console.error('Error updating objects:', error);
+    throw new Error('Error updating objects');
+  }
+};
+
+export default { getObjects,updateUbicacionofObjects ,getIdsbyCodes, createObject,getObjectsfromUbicacion, getObject, updateObject, deleteObject, getObjectbyResponsable, findObjectsWithFieldFalse,getResponsablesofObjects, generateExcelbyResponsable, getObjectbyCode, getObjectsByCode, generateExcelbyCodes, updateResponsableofObjects, updateResponsablewithCode, updateObjectsbyCodes, updateObjectbyCode, getUbicacionesofObjects};

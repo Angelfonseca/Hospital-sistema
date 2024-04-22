@@ -101,8 +101,8 @@ const generateExcelbyResponsable = async (req: Request, res: Response) => {
 
     console.log('Archivo Excel generado y enviado correctamente');
   } catch (error: any) {
-    console.error('Error al generar y enviar el archivo Excel:', error.message);
-    res.status(500).json({ error: 'Error al generar y enviar el archivo Excel' });
+    handleHttp(res, error, "Error generating and sending the Excel file");
+    return new Error('Error al generar y enviar el archivo Excel'); 
   }
 };
 
@@ -138,8 +138,8 @@ const getObjectsByCode = async (req: Request, res: Response) => {
     const objects = await objectsService.getObjectsByCode(codes);;
     return res.status(200).json(objects);
   } catch (error: any) {
-    console.error('Error:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    handleHttp(res, error, "Error getting objects by codes");
+    return new Error;
   }
 }
 
@@ -156,8 +156,8 @@ const getObjectbyCode = async (req: Request, res: Response) => {
     const objects = await objectsService.getObjectbyCode(code);
     return res.status(200).json(objects);
   } catch (error: any) {
-    console.error('Error:', error);
-    return res.status(500).json({ error: 'Error getting object by code' });
+    handleHttp(res, error, "Error getting object by code");
+    return new Error;
   }
 }
 
@@ -251,9 +251,8 @@ const getObjectsfromUbicacion = async (req: Request, res: Response) => {
 
 const updateUbicationofObject = async (req: Request, res: Response) => {
   try {
-    const codes = [req.body.codes];
-    const ubicacion = req.body.ubicacion;
-    if (!codes || !ubicacion) {
+    const { codes, ubicacion } = req.body; // Utiliza destructuring para obtener los códigos y la ubicación
+    if (!Array.isArray(codes) || codes.length === 0 || !ubicacion) { // Verifica si los códigos son un array y la ubicación está presente
       return res.status(400).json({ error: 'Invalid parameters' });
     }
     const updatedObject = await objectsService.updateUbicacionofObjects(codes, ubicacion);
@@ -265,12 +264,28 @@ const updateUbicationofObject = async (req: Request, res: Response) => {
 }
 
 
+const getIdsbyCodes = async (req: Request, res: Response) => {
+  try {
+    const codes = req.body.codes;
+    if (!Array.isArray(codes) || codes.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty codes array' });
+    }
+    const objects = await objectsService.getIdsbyCodes(codes);
+    return res.status(200).json(objects);
+  } catch (error: any) {
+    handleHttp(res, error, "Error getting objects by codes");
+    return new Error;
+  }
+}
+
+
 export default {
   getObjects,
   createObject,
   getObject,
   updateObject,
   deleteObject,
+  getIdsbyCodes,
   getObjectbyResponsable,
   getObjectsWithFieldFalse,
   generateExcelbyResponsable,
