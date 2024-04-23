@@ -1,5 +1,11 @@
 /* ========== Mobil ========== */
-
+.ContainerFull_Inicio{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
 
 /* Contendedor Opciones */
 .Con_Inicio{
@@ -37,8 +43,8 @@
 
 
 #InicioImg{
-    width: 150px;
-    height: 150px;
+    width: 80px;
+    height: 80px;
 
     margin: 10px 30px 0px 30px;
 }
@@ -63,6 +69,15 @@
 
 /* ========== Desktop ========== */
 @media (min-width: 900px) {
+    .ContainerFull_Inicio{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+        height: 100%;
+    }
+
+
     html{
         font-weight: 600;
         font-size: 30px;

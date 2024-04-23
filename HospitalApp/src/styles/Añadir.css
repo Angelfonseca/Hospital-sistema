@@ -3,7 +3,8 @@
     display: flex;
     flex-direction: column;
 
-    margin-top: 600px;
+    margin-top: 30px;
+    height: 100%;
 }
 
 .Con_Form_Add {
@@ -73,27 +74,27 @@
 }
 
 /* CheckBox */
-.Con_Check {
-    margin-top: 10px;
+.Con_CheckBoxAdd {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 10px;
+    justify-content: space-evenly;
     align-items: center;
     padding-left: 30px;
 }
 
-.Con_Check label {
+.Con_CheckBoxAdd label {
     font-size: 18px;
 }
 
-#CB_Consumible {
+#CB_ConsumibleAdd {
     width: 20px;
     height: 20px;
 }
 
 /* Inputs */
 #Inputs_Add_Pro {
-    width: 98%;
+    width: 95%;
     height: 40px;
     border: 1px #ADB5BD solid;
     border-radius: 5px;
@@ -101,7 +102,7 @@
 }
 
 #Input_AddDesc_Pro {
-    width: 98%;
+    width: 95%;
     height: 40px;
     border: 1px #ADB5BD solid;
     border-radius: 5px;
@@ -133,6 +134,7 @@
     .ContainerFull_Add {
         display: flex;
         flex-direction: column;
+        justify-content: center;
 
         margin-top: 0px;
     }
@@ -190,14 +192,6 @@
         gap: 30px;
     }
 
-    .Con_BTNAdd {
-        display: flex;
-        flex-direction: row;
-
-        justify-content: end;
-        gap: 10px;
-        margin-right: 10px;
-    }
 
     .Con_Inputs_Add>div:nth-child(2) {
         display: flex;
@@ -219,7 +213,7 @@
 
     .Con_Inputs_Add>div:nth-child(5) {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
     }
 
     .Con_BTNAdd {

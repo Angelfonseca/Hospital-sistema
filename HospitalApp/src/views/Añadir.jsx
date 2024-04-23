@@ -20,17 +20,23 @@ export default function Añadir() {
   const [modelo, setModelo] = useState('');
   const [serie, setSerie] = useState('');
   const [motor, setMotor] = useState('');
-  // const [descripcion, setDescripcion] = useState('');
   const [recursos, setRecurso] = useState('');
   const [responsable, setResponsable] = useState('');
   const [ubicacion, setArea] = useState('');
-
+  var [consumible, setConsumible] = useState(false);
   var descripcion = 'Descripcion del bien';
-  var consumible = true;
   var activo = true;
 
 
   const store = async (e) => {
+
+    if(CB_ConsumibleAdd.checked === true){
+      consumible = true;
+    }
+    if(CB_ConsumibleAdd.checked === false){
+      consumible = false;
+    }
+
     e.preventDefault();
     if(asignado === '' || cve_cabms === '' || consecutivo === '' || descrip_bm === '' || costo_bien === '' || marca === '' || modelo === '' || serie === '' || motor === '' || recursos === '' || responsable === '' || ubicacion === ''){
       alert('Todos los campos son obligatorios');
