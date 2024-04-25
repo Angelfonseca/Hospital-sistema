@@ -7,21 +7,8 @@ export const useAuth = ({ middleware, url }) => {
     //Variable para usar la navegación
     const Navegacion = useNavigate()
 
-    //Guardar Token en localstorage
+    //Obtener Token del localstorage
     const token = localStorage.getItem('AUTH TOKEN')
-
-
-    const { data: user, error, mutate } = useSWR('/api/users', () =>
-        clienteAxios('/api/users', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(res => res.data)
-            .catch(error => {
-                throw Error(error?.response?.data?.errors)
-            })
-    )
 
     //Login 
     const login = async (datos) => {
@@ -37,34 +24,26 @@ export const useAuth = ({ middleware, url }) => {
 
     //Cerrar sesión
     const logout = async () => {
-        try {
-            await clienteAxios.post('/api/logout', null, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            localStorage.removeItem('AUTH TOKEN')
-            await mutate(undefined)
-        } catch (error) {
-            console.log(error.response.data.errors)
-        }
+        localStorage.removeItem('AUTH TOKEN')
+        Navegacion('/auth')
     }
 
     //Validar si el usuario está autenticado
-    useEffect(() => {
-        if (middleware === 'guest' && url && user) {
-            Navegacion(url)
-        }
-        if (middleware === 'auth' && error) {
-            Navegacion('/auth')
-        }
-    }, [user, error])
+    // useEffect(() => {
+    //     if (middleware === 'guest' && url && token !== null) {
+    //         Navegacion(url)
+    //         console.log('Token encontrado')
+    //     }
+    //     if (token === null) {
+    //         Navegacion('/auth')
+    //         console.log('No estás autenticado')
+    //     }
+    // })
 
     //Retornar valores
     return {
         login,
-        user,
-        error
+        logout
     }
 }
 

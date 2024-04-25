@@ -2,6 +2,7 @@
 import add from "/src/assets/add.png"
 import edit from "/src/assets/edit.png"
 import inventory from "/src/assets/inventory.png"
+import { useAuth } from '../Hook/UseAuth'
 
 // Styles
 import "/src/styles/Inicio.css"
@@ -10,10 +11,18 @@ import "/src/styles/Inicio.css"
 import {Link} from 'react-router-dom'
 
 export default function Inicio() {
+
+  //Funcion para cerrar sesión
+  const { logout } = useAuth({
+    middleware: 'auth',
+    url: '/auth',
+  });
+
+
   return (
     <div className="ContainerFull_Inicio">
       <div>
-        <button id="BtnSalir">Salir</button>
+        <button id="BtnSalir" onClick={logout}>Salir</button>
       </div>
       <div className="Con_Inicio">
         <div>
