@@ -10,6 +10,7 @@ import Inicio from './views/Inicio.jsx';
 import Reportes from './views/Reportes.jsx';
 import Editar from './views/Editar.jsx';
 import Añadir from './views/Añadir.jsx';
+import Error from './views/Error.jsx';
 
 const router = createBrowserRouter([
     {
@@ -44,7 +45,12 @@ const router = createBrowserRouter([
                 element: <Login/> 
             },
         ]
+    },
+    {
+        path: '*',
+        element: <Error/>
     }
+    
 ])
 
 export default router

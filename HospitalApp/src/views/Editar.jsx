@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import clienteAxios from '/src/config/axios';
+import { Toaster, toast } from 'sonner'
+import { useNavigate } from 'react-router-dom';
 
 //Images
 import EditIcon from '/src/assets/Edit_Icon.png';
@@ -27,6 +29,20 @@ export default function Editar() {
   const [ubicacion, setArea] = useState('');
   var [consumible, setConsumible] = useState(false);
 
+  const Navegacion = useNavigate() //Variable para usar la navegación
+
+  //Función para verificar si el usuario está autenticado
+  function islogged() {
+    const token = localStorage.getItem('AUTH TOKEN')
+    if (token === null) {
+      Navegacion('/auth')
+    }
+  }
+
+  useEffect(() => {
+    islogged();
+  }, [])
+
   //Obtener producto por ID
   const getProductByID = async (e) => {
     e.preventDefault();
@@ -47,7 +63,7 @@ export default function Editar() {
 
     //Validar si el producto está activo
     if (respuesta.data[0].activo === false) {
-      alert('El producto que intentas editar se encuentra desactivado');
+      toast.error('El producto ésta desactivado');
       setSearch('');
       setAsignado('');
       setClave('');
@@ -74,10 +90,10 @@ export default function Editar() {
   const update = async (e) => {
     e.preventDefault();
 
-    if(CB_Consumible.checked === true){
+    if (CB_Consumible.checked === true) {
       consumible = true;
     }
-    if(CB_Consumible.checked === false){
+    if (CB_Consumible.checked === false) {
       consumible = false;
     }
 
@@ -97,7 +113,7 @@ export default function Editar() {
       consumible: consumible
     })
     //Alerta de producto actualizado
-    alert('Producto actualizado correctamente');
+    toast.success('Producto actualizado correctamente');
 
     //Limpiar campos
     setSearch('');
@@ -122,7 +138,7 @@ export default function Editar() {
     await clienteAxios.put(`/api/objects/crud/${Search}`, {
       activo: false
     })
-    alert('Producto eliminado correctamente');
+    toast.success('Producto eliminado correctamente');
 
     //Limpiar campos
     setSearch('');
@@ -142,6 +158,13 @@ export default function Editar() {
 
   return (
     <div className='ContainerFull_Edit'>
+      <Toaster className='EditToast' position='top-left' expand={true} richColors toastOptions={{
+        style: {
+          fontSize: '22px',
+          width: 'max-content',
+          className: 'EditToast'
+        }
+      }}/>
       <div>
         <Link to="/"><button id='BTN_EditRegresar'>Regresar</button></Link>
       </div>

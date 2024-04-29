@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import clienteAxios from '/src/config/axios';
+import { useNavigate } from 'react-router-dom';
+import { Toaster, toast } from 'sonner'
 
 //Import FileSaver para descargar archivos
 import FileSaver from 'file-saver';
@@ -10,12 +12,29 @@ import FileSaver from 'file-saver';
 //Styles
 import '/src/styles/Reportes.css';
 
+const AppStatus = {
+  loading: 'loading',
+  loaded: 'loaded',
+}
+
 export default function Reportes() {
+  const [appStatus, setAppStatus] = useState([]); //Variable para el estado de la aplicación
   var [responsables, setResponsables] = useState([]);
   var [ubicaciones, setUbicaciones] = useState([]);
   var [productos, setProductos] = useState([]);
   var [SearchID, setSearchID] = useState('');
   var excelArray = [];
+
+  const Navegacion = useNavigate() //Variable para usar la navegación
+
+ //Función para verificar si el usuario está autenticado
+  function islogged() {
+    const token = localStorage.getItem('AUTH TOKEN')
+    if (token === null) {
+      Navegacion('/auth')
+    }
+  }
+
   //Obtener Producto por ID
   const getProductByID = async (e) => {
     e.preventDefault();
@@ -29,12 +48,10 @@ export default function Reportes() {
     if (!productoYaExiste) {
       setProductos(prevProductos => [...prevProductos, NewProducto]);
     }else {
-      console.log('El producto ya está en el array');
+      toast.error('El producto ya está en el array');
     }
 
     setSearchID('');
-
-    // setProductos(prevProductos => [...prevProductos, respuesta.data[0]]); 
   }
   //Obtener Responsables
   const ObtenerResponsables = async () => {
@@ -48,9 +65,27 @@ export default function Reportes() {
   }
   //Ejecutar funciones al cargar la página
   useEffect(() => {
-    ObtenerResponsables()
-    ObtenerAreas()
+    islogged();
+    ObtenerResponsables();
+    ObtenerAreas();
   },[])
+
+  const CambiarResponsable = (e) => {
+    e.preventDefault();
+
+    const responsable = SelectResponsable.value;
+
+    const CambioResp = {
+      responsable: responsable,
+      productos: productos
+    }
+
+    // await clienteAxios.post(`/api/objects/responsable`, )
+  }
+
+  const CambiarArea = (e) => {
+    e.preventDefault();
+  }
 
   //Generar Excel
   const GenerarExcel = async (e) => {
@@ -82,8 +117,22 @@ export default function Reportes() {
   }
 
 
+
+  //Función eliminar producto
+  function deleteProduct(id) {
+    const newProducts = productos.filter(producto => producto._id !== id);
+    setProductos(newProducts);
+  }
+
   return (
     <div className='Container_Reports'>
+      <Toaster position='top-left' richColors expand={true} toastOptions={{
+        style: {
+          fontSize: '22px',
+          width: 'max-content',
+          position: 'absolute',
+        }
+      }}/>
       <div>
         <Link to="/"><button id='btnRegresarRep'>Regresar</button></Link>
       </div>
@@ -92,7 +141,7 @@ export default function Reportes() {
         <button onClick={getProductByID} id='btnEnter'>Enter</button>
         <select name="Responsable" className='Selector' id="SelectResponsable">
           {responsables.map((responsable) => (
-            <option value={responsable.id}>{responsable}</option>
+            <option key={responsable._id} value={responsable._id}>{responsable}</option>
           ))}
         </select>
         <select name="Ubicacion" className='Selector' id="SelectArea">
@@ -112,6 +161,7 @@ export default function Reportes() {
               <th data-titulo='Recurso'>Recurso</th>
               <th data-titulo='Resposable'>Resposable Actual</th>
               <th data-titulo='Ubicación'>Ubicación</th>
+              <th data-titulo='Acciones'>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -124,6 +174,7 @@ export default function Reportes() {
                 <td data-titulo='Recurso'>{producto.recursos}</td>
                 <td data-titulo='Resposable'>{producto.responsable}</td>
                 <td data-titulo='Ubicación'>{producto.ubicacion}</td>
+                <td data-titulo='Acciones' id='tdAcciones'><button onClick={()=> deleteProduct(producto._id)} id='ReportsDelete'>Eliminar</button></td>
               </tr>
             ))}
           </tbody>

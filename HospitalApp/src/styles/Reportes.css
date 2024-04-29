@@ -153,6 +153,26 @@ tbody{
     color: white;
 }
 
+#tdAcciones{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Button Delete Product */
+#ReportsDelete{
+    width: 100px;
+    height: 40px;
+
+    background-color: #DC3545;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+    margin-left: 10px;
+}
 
 /* ========== Desktop ========== */
 @media (min-width: 900px) {

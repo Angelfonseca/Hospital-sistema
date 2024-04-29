@@ -1,6 +1,8 @@
 import {Link} from 'react-router-dom';
 import clienteAxios from '/src/config/axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Toaster, toast } from 'sonner'
+import { useNavigate } from 'react-router-dom';
 
 //Images
 import AddIcon from '/src/assets/Add_Icon.png';
@@ -27,6 +29,19 @@ export default function Añadir() {
   var descripcion = 'Descripcion del bien';
   var activo = true;
 
+  const Navegacion = useNavigate() //Variable para usar la navegación
+
+  //Función para verificar si el usuario está autenticado
+  function islogged() {
+    const token = localStorage.getItem('AUTH TOKEN')
+    if (token === null) {
+      Navegacion('/auth')
+    }
+  }
+
+  useEffect(() => {
+    islogged();
+  }, [])
 
   const store = async (e) => {
 
@@ -39,22 +54,44 @@ export default function Añadir() {
 
     e.preventDefault();
     if(asignado === '' || cve_cabms === '' || consecutivo === '' || descrip_bm === '' || costo_bien === '' || marca === '' || modelo === '' || serie === '' || motor === '' || recursos === '' || responsable === '' || ubicacion === ''){
-      alert('Todos los campos son obligatorios');
+      toast.error('Todos los campos son obligatorios');
       return;
     }
     
     try {
       e.preventDefault();
-      const response = await await clienteAxios.post('/api/objects/crud/', {asignado: asignado, cve_cabms:cve_cabms, consecutivo:consecutivo, descrip_bm:descrip_bm, costo_bien:costo_bien, marca:marca, modelo:modelo, serie:serie, motor:motor, descripcion:descripcion, recursos:recursos, responsable:responsable, ubicacion:ubicacion, consumible:consumible, activo:activo});
-      console.log(response);
-      alert('Producto añadido correctamente');
+      await clienteAxios.post('/api/objects/crud/', {asignado: asignado, cve_cabms:cve_cabms, consecutivo:consecutivo, descrip_bm:descrip_bm, costo_bien:costo_bien, marca:marca, modelo:modelo, serie:serie, motor:motor, descripcion:descripcion, recursos:recursos, responsable:responsable, ubicacion:ubicacion, consumible:consumible, activo:activo});
+      toast.success('Producto añadido correctamente');
+
+      //Limpiar campos
+      setAsignado('');
+      setClave('');
+      setConsecutivo('');
+      setDescripcionBm('');
+      setCosto('');
+      setMarca('');
+      setModelo('');
+      setSerie('');
+      setMotor('');
+      setRecurso('');
+      setResponsable('');
+      setArea('');
+      setConsumible(false);
+
     } catch (error) {
-      console.log(error);
+      toast.error('Error al añadir el producto');
+      toast.error(error.response.data.error)
     }
   }
 
   return (
     <div className='ContainerFull_Add'>
+      <Toaster position='top-left' richColors expand={true} toastOptions={{
+        style: {
+          fontSize: '22px',
+          width: 'max-content',
+        }
+      }}/>
       <div>
         <Link to="/"><button id='BTN_AddRegresar'>Regresar</button></Link>
       </div>
