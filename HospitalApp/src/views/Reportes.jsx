@@ -1,10 +1,10 @@
 //Import Link para Rutear
 import { Link } from 'react-router-dom';
-import * as React from 'react';
 import { useEffect, useState } from 'react';
 import clienteAxios from '/src/config/axios';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'sonner'
+import { useDebounce } from '@uidotdev/usehooks';
 
 //Import FileSaver para descargar archivos
 import FileSaver from 'file-saver';
@@ -17,6 +17,8 @@ const AppStatus = {
   loaded: 'loaded',
 }
 
+const debounce_time = 500;
+
 export default function Reportes() {
   const [appStatus, setAppStatus] = useState([]); //Variable para el estado de la aplicación
   var [responsables, setResponsables] = useState([]);
@@ -24,8 +26,11 @@ export default function Reportes() {
   var [productos, setProductos] = useState([]);
   var [SearchID, setSearchID] = useState('');
   var excelArray = [];
+  var Res_Product_Array = [];
+  var Area_Product_Array = [];
 
   const Navegacion = useNavigate() //Variable para usar la navegación
+  const debounceSearchID = useDebounce(SearchID, debounce_time);
 
  //Función para verificar si el usuario está autenticado
   function islogged() {
@@ -36,22 +41,24 @@ export default function Reportes() {
   }
 
   //Obtener Producto por ID
-  const getProductByID = async (e) => {
-    e.preventDefault();
-    const respuesta = await clienteAxios.get(`/api/objects/codes/${SearchID}`);
-    const NewProducto = respuesta.data[0];
+  const getProductByIDReport = async (e) => {
+    if (e.key === 'Enter'){
+      e.preventDefault();
+      const respuesta = await clienteAxios.get(`/api/objects/codes/${SearchID}`);
+      const NewProducto = respuesta.data[0];
 
-    // Verificar si el producto ya está en el array
-    const productoYaExiste = productos.some(producto => producto._id === NewProducto._id);
+      // Verificar si el producto ya está en el array
+      const productoYaExiste = productos.some(producto => producto._id === NewProducto._id);
 
-    //Agrega el producto al array de productos
-    if (!productoYaExiste) {
-      setProductos(prevProductos => [...prevProductos, NewProducto]);
-    }else {
-      toast.error('El producto ya está en el array');
+      //Agrega el producto al array de productos
+      if (!productoYaExiste) {
+        setProductos(prevProductos => [...prevProductos, NewProducto]);
+      }else {
+        toast.error('El producto ya está en la tabla');
+      }
+
+      setSearchID('');
     }
-
-    setSearchID('');
   }
   //Obtener Responsables
   const ObtenerResponsables = async () => {
@@ -70,21 +77,59 @@ export default function Reportes() {
     ObtenerAreas();
   },[])
 
-  const CambiarResponsable = (e) => {
-    e.preventDefault();
+  //Función para cambiar el responsable
+  const CambiarResponsable = async () => {
 
     const responsable = SelectResponsable.value;
 
-    const CambioResp = {
-      responsable: responsable,
-      productos: productos
+    //Llenar el array con los códigos de los productos
+    for (let i = 0; i < productos.length; i++) {
+      var Product = productos[i].asignado + '-' + productos[i].cve_cabms + '-' + productos[i].consecutivo;
+      Res_Product_Array.push(Product);
     }
 
-    // await clienteAxios.post(`/api/objects/responsable`, )
+    //Crear un objeto con los códigos y el responsable
+    const CambioResp = {
+      responsable: responsable,
+      codes: Res_Product_Array
+    }
+
+    try {
+      await clienteAxios.post(`/api/objects/responsable/update/codes`, CambioResp);
+      toast.success('Responsable Modificado');
+    } catch (error) {
+      console.log(error);
+    }
+    
   }
 
-  const CambiarArea = (e) => {
-    e.preventDefault();
+  //Función para cambiar el área
+  const CambiarArea = async() => {
+    
+    const area = SelectArea.value;
+
+    //Llenar el array con los códigos de los productos
+    for (let i = 0; i < productos.length; i++) {
+      var Product = productos[i].asignado + '-' + productos[i].cve_cabms + '-' + productos[i].consecutivo;
+      Area_Product_Array.push(Product);
+    }
+
+    //Crear un objeto con los códigos y el área
+    const CambioArea = {
+      ubicacion: area,
+      codes: Area_Product_Array
+    }
+
+    console.log(CambioArea);
+
+    try {
+      await clienteAxios.post(`/api/objects/ubicaciones`, CambioArea);
+      toast.success('Área Modificada');
+    } catch (error) {
+      console.log(error);
+    }
+    
+
   }
 
   //Generar Excel
@@ -112,11 +157,11 @@ export default function Reportes() {
     //Limpiar la tabla de productos
     setProductos([]);
 
-    console.log(SelectArea.value)
-    console.log(SelectResponsable.value)
+    //Función para cambiar responsable
+    CambiarResponsable();
+    //Función para cambiar area
+    CambiarArea();
   }
-
-
 
   //Función eliminar producto
   function deleteProduct(id) {
@@ -137,8 +182,8 @@ export default function Reportes() {
         <Link to="/"><button id='btnRegresarRep'>Regresar</button></Link>
       </div>
       <div>
-        <input type="text" id='SearchID' placeholder='Ingresa Código de Barras' value={SearchID} onChange={(e) => setSearchID(e.target.value)} />
-        <button onClick={getProductByID} id='btnEnter'>Enter</button>
+        <input type="search" name="SearchID" id='SearchID' placeholder='Ingresa Código de Barras' value={SearchID} onChange={(e) => setSearchID(e.target.value)} onKeyPress={getProductByIDReport}/>
+        <button onClick={getProductByIDReport} id='btnEnter'>Enter</button>
         <select name="Responsable" className='Selector' id="SelectResponsable">
           {responsables.map((responsable) => (
             <option key={responsable._id} value={responsable._id}>{responsable}</option>

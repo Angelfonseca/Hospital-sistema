@@ -90,6 +90,7 @@ export default function Añadir() {
         style: {
           fontSize: '22px',
           width: 'max-content',
+          position: 'absolute',
         }
       }}/>
       <div>

@@ -21,13 +21,13 @@ const isMatchPassword = async (user: any, password: string) => {
 const login = async (credentials: any) => {
   const user = await UserModel.findOne({ username: credentials.username });
   if (!user) {
-    return { error: true, message: 'USER NOT FOUND' }
+    return { error: true, message: 'Usuario no encontrado' }
   }
   const matchPassword = await isMatchPassword(user, credentials.password);
   if (matchPassword) {
     return { error: false, user }
   }
-  return { error: true, message: 'INVALID CREDENTIALS' }
+  return { error: true, message: 'Los datos son incorrectos' }
 }
 
 export default {

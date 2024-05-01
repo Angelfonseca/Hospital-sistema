@@ -5,16 +5,14 @@ import Aguas from '/src/assets/Aguas.png'
 // Styles
 import '/src/styles/Login.css'
 
-import { createRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import clienteAxios from '../config/axios'
+import { Toaster, toast } from 'sonner'
 
 export default function Login() {
   const [Usuario, setUsuario] = useState('')
   const [Contra, setContra] = useState('')
-
-  const userRef = createRef();
-  const passRef = createRef();
 
   const Navegacion = useNavigate() //Variable para usar la navegación
 
@@ -46,13 +44,20 @@ export default function Login() {
       localStorage.setItem('AUTH TOKEN', data.token) // Guardar token en localstorage
       Navegacion('/') // Redirigir a la página principal
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.error)
     }
 
   }
 
   return (
     <div className='Conteiner_Login'>
+      <Toaster position='top-left' richColors expand={true} toastOptions={{
+        style: {
+          fontSize: '22px',
+          width: 'max-content',
+          position: 'absolute',
+        }
+      }}/>
       <div className='Con_Login'>
         <div>
           <img src={Aguas} alt="Aguas Logo" />
@@ -62,8 +67,8 @@ export default function Login() {
           <form className="Form_Login" onSubmit={handleSubmit}>
             <h1>Bienvenido!</h1>
             <p id='PDatos'>¡Ingresa los datos para poder iniciar sesión correctamente!</p>
-            <input value={Usuario} onChange={(e) => setUsuario(e.target.value)} name="username" id="LoginInput" placeholder="Usuario" ref={userRef} />
-            <input value={Contra} onChange={(e) => setContra(e.target.value)} name="password" id="LoginInput" placeholder="Contraseña" ref={passRef} type="password" />
+            <input value={Usuario} onChange={(e) => setUsuario(e.target.value)} name="username" id="LoginInput" placeholder="Usuario"/>
+            <input value={Contra} onChange={(e) => setContra(e.target.value)} name="password" id="LoginInput" placeholder="Contraseña" type="password" />
             <input type="submit" value="Iniciar Sesión" id='BtnLogin' />
           </form>
         </div>
