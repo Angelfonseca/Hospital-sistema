@@ -55,7 +55,6 @@ export default function Login() {
         style: {
           fontSize: '22px',
           width: 'max-content',
-          position: 'absolute',
         }
       }}/>
       <div className='Con_Login'>

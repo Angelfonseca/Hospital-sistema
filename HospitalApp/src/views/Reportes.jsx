@@ -32,7 +32,7 @@ export default function Reportes() {
   const Navegacion = useNavigate() //Variable para usar la navegación
   const debounceSearchID = useDebounce(SearchID, debounce_time);
 
- //Función para verificar si el usuario está autenticado
+  //Función para verificar si el usuario está autenticado
   function islogged() {
     const token = localStorage.getItem('AUTH TOKEN')
     if (token === null) {
@@ -42,22 +42,29 @@ export default function Reportes() {
 
   //Obtener Producto por ID
   const getProductByIDReport = async (e) => {
-    if (e.key === 'Enter'){
-      e.preventDefault();
-      const respuesta = await clienteAxios.get(`/api/objects/codes/${SearchID}`);
-      const NewProducto = respuesta.data[0];
+    if (e.key === 'Enter') { //Verificar si se presionó la tecla Enter
 
-      // Verificar si el producto ya está en el array
-      const productoYaExiste = productos.some(producto => producto._id === NewProducto._id);
+      try {
+        e.preventDefault();
+        const respuesta = await clienteAxios.get(`/api/objects/codes/${SearchID}`);
+        const NewProducto = respuesta.data[0];
 
-      //Agrega el producto al array de productos
-      if (!productoYaExiste) {
-        setProductos(prevProductos => [...prevProductos, NewProducto]);
-      }else {
-        toast.error('El producto ya está en la tabla');
+        // Verificar si el producto ya está en el array
+        const productoYaExiste = productos.some(producto => producto._id === NewProducto._id);
+
+        //Agrega el producto al array de productos
+        if (!productoYaExiste) {
+          setProductos(prevProductos => [...prevProductos, NewProducto]);
+        } else {
+          toast.error('El producto ya está en la tabla');
+        }
+        setSearchID('');
+      } catch (error) {
+        toast.error('Producto no encontrado');
       }
 
-      setSearchID('');
+
+
     }
   }
   //Obtener Responsables
@@ -75,7 +82,7 @@ export default function Reportes() {
     islogged();
     ObtenerResponsables();
     ObtenerAreas();
-  },[])
+  }, [])
 
   //Función para cambiar el responsable
   const CambiarResponsable = async () => {
@@ -83,10 +90,15 @@ export default function Reportes() {
     const responsable = SelectResponsable.value;
 
     //Llenar el array con los códigos de los productos
-    for (let i = 0; i < productos.length; i++) {
-      var Product = productos[i].asignado + '-' + productos[i].cve_cabms + '-' + productos[i].consecutivo;
-      Res_Product_Array.push(Product);
+    try {
+      for (let i = 0; i < productos.length; i++) {
+        var Product = productos[i].asignado + '-' + productos[i].cve_cabms + '-' + productos[i].consecutivo;
+        Res_Product_Array.push(Product);
+      }
+    } catch (error) {
+      toast.error('El codigó está mal escrito');
     }
+
 
     //Crear un objeto con los códigos y el responsable
     const CambioResp = {
@@ -100,12 +112,12 @@ export default function Reportes() {
     } catch (error) {
       console.log(error);
     }
-    
+
   }
 
   //Función para cambiar el área
-  const CambiarArea = async() => {
-    
+  const CambiarArea = async () => {
+
     const area = SelectArea.value;
 
     //Llenar el array con los códigos de los productos
@@ -128,7 +140,7 @@ export default function Reportes() {
     } catch (error) {
       console.log(error);
     }
-    
+
 
   }
 
@@ -137,7 +149,7 @@ export default function Reportes() {
     e.preventDefault();
     //Vacia el array con los códigos de los productos
     excelArray = [];
-    
+
     //Llenar el array con los códigos de los productos
     for (let i = 0; i < productos.length; i++) {
       var Product = productos[i].asignado + '-' + productos[i].cve_cabms + '-' + productos[i].consecutivo;
@@ -170,20 +182,20 @@ export default function Reportes() {
   }
 
   return (
-    <div className='Container_Reports'>
-      <Toaster position='top-left' richColors expand={true} toastOptions={{
+    <>
+    <Toaster position='top-left' richColors expand={true} toastOptions={{
         style: {
           fontSize: '22px',
           width: 'max-content',
           position: 'absolute',
         }
-      }}/>
+      }} />
+    <div className='Container_Reports'>
       <div>
         <Link to="/"><button id='btnRegresarRep'>Regresar</button></Link>
       </div>
       <div>
-        <input type="search" name="SearchID" id='SearchID' placeholder='Ingresa Código de Barras' value={SearchID} onChange={(e) => setSearchID(e.target.value)} onKeyPress={getProductByIDReport}/>
-        <button onClick={getProductByIDReport} id='btnEnter'>Enter</button>
+        <input type="search" name="SearchID" id='SearchID' placeholder='Ingresa Código de Barras' value={SearchID} onChange={(e) => setSearchID(e.target.value)} onKeyPress={getProductByIDReport} />
         <select name="Responsable" className='Selector' id="SelectResponsable">
           {responsables.map((responsable) => (
             <option key={responsable._id} value={responsable._id}>{responsable}</option>
@@ -219,7 +231,7 @@ export default function Reportes() {
                 <td data-titulo='Recurso'>{producto.recursos}</td>
                 <td data-titulo='Resposable'>{producto.responsable}</td>
                 <td data-titulo='Ubicación'>{producto.ubicacion}</td>
-                <td data-titulo='Acciones' id='tdAcciones'><button onClick={()=> deleteProduct(producto._id)} id='ReportsDelete'>Eliminar</button></td>
+                <td data-titulo='Acciones' id='tdAcciones'><button onClick={() => deleteProduct(producto._id)} id='ReportsDelete'>Eliminar</button></td>
               </tr>
             ))}
           </tbody>
@@ -229,5 +241,7 @@ export default function Reportes() {
         <button id='btn_Excel' onClick={GenerarExcel}>Exportar a Excel</button>
       </div>
     </div>
+    </>
+    
   )
 }
