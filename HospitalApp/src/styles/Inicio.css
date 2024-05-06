@@ -9,13 +9,14 @@
 
 /* Contendedor Opciones */
 .Con_Inicio{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template: 
+        "ConInicio_1 ConInicio_2" 50%
+        "ConInicio_3 ConInicio_4" 50%;
+
     background-color: #ffffffcb;
     border-radius: 10px;
-    gap: 20px;
+    gap: 30px;
 
     padding: 15px 20px;
     -webkit-box-shadow: 0px 9px 18px -1px rgba(0,0,0,0.75);
@@ -32,6 +33,7 @@
     align-items: center;
     flex-direction: column;
     text-align: center;
+    margin-bottom: 15px;
 
     background-color: white;
     border-radius: 10px;
@@ -109,6 +111,7 @@
         align-items: center;
         flex-direction: column;
         text-align: center;
+        margin-bottom: 0px;
     
         background-color: white;
         border-radius: 10px;

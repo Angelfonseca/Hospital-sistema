@@ -11,6 +11,7 @@ import Reportes from './views/Reportes.jsx';
 import Editar from './views/Editar.jsx';
 import Añadir from './views/Añadir.jsx';
 import Error from './views/Error.jsx';
+import Responsable from './views/Reponsable.jsx';
 
 const router = createBrowserRouter([
     {
@@ -32,6 +33,11 @@ const router = createBrowserRouter([
             {
                 path: '/añadir',
                 element: <Añadir/>
+            
+            },
+            {
+                path: '/Responsable',
+                element: <Responsable/>
             
             }
         ]

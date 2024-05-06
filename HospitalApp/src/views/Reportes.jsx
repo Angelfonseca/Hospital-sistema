@@ -147,6 +147,12 @@ export default function Reportes() {
   //Generar Excel
   const GenerarExcel = async (e) => {
     e.preventDefault();
+
+    //Función para cambiar responsable
+    CambiarResponsable();
+    //Función para cambiar area
+    CambiarArea();
+
     //Vacia el array con los códigos de los productos
     excelArray = [];
 
@@ -168,11 +174,6 @@ export default function Reportes() {
 
     //Limpiar la tabla de productos
     setProductos([]);
-
-    //Función para cambiar responsable
-    CambiarResponsable();
-    //Función para cambiar area
-    CambiarArea();
   }
 
   //Función eliminar producto
@@ -183,65 +184,65 @@ export default function Reportes() {
 
   return (
     <>
-    <Toaster position='top-left' richColors expand={true} toastOptions={{
+      <Toaster position='top-left' richColors expand={true} toastOptions={{
         style: {
           fontSize: '22px',
           width: 'max-content',
           position: 'absolute',
         }
       }} />
-    <div className='Container_Reports'>
-      <div>
-        <Link to="/"><button id='btnRegresarRep'>Regresar</button></Link>
-      </div>
-      <div>
-        <input type="search" name="SearchID" id='SearchID' placeholder='Ingresa Código de Barras' value={SearchID} onChange={(e) => setSearchID(e.target.value)} onKeyPress={getProductByIDReport} />
-        <select name="Responsable" className='Selector' id="SelectResponsable">
-          {responsables.map((responsable) => (
-            <option key={responsable._id} value={responsable._id}>{responsable}</option>
-          ))}
-        </select>
-        <select name="Ubicacion" className='Selector' id="SelectArea">
-          {ubicaciones.map((Ubicacion) => (
-            <option value={Ubicacion.id}>{Ubicacion}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <table id='TableProducts'>
-          <thead>
-            <tr>
-              <th data-titulo='Idetificador'>Idetificador</th>
-              <th data-titulo='Descripción'>Descripción</th>
-              <th data-titulo='Costo'>Costo</th>
-              <th data-titulo='Marca'>Marca</th>
-              <th data-titulo='Recurso'>Recurso</th>
-              <th data-titulo='Resposable'>Resposable Actual</th>
-              <th data-titulo='Ubicación'>Ubicación</th>
-              <th data-titulo='Acciones'>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productos.map((producto) => (
-              <tr key={producto._id}>
-                <td data-titulo='Idetificador'>{producto.asignado}-{producto.cve_cabms}-{producto.consecutivo}</td>
-                <td data-titulo='Descripción'>{producto.descrip_bm}</td>
-                <td data-titulo='Costo'>{producto.costo_bien}</td>
-                <td data-titulo='Marca'>{producto.marca}</td>
-                <td data-titulo='Recurso'>{producto.recursos}</td>
-                <td data-titulo='Resposable'>{producto.responsable}</td>
-                <td data-titulo='Ubicación'>{producto.ubicacion}</td>
-                <td data-titulo='Acciones' id='tdAcciones'><button onClick={() => deleteProduct(producto._id)} id='ReportsDelete'>Eliminar</button></td>
-              </tr>
+      <div className='Container_Reports'>
+        <div>
+          <Link to="/"><button id='btnRegresarRep'>Regresar</button></Link>
+        </div>
+        <div>
+          <input type="search" name="SearchID" id='SearchID' placeholder='Ingresa Código de Barras' value={SearchID} onChange={(e) => setSearchID(e.target.value)} onKeyPress={getProductByIDReport} />
+          <select name="Responsable" className='Selector' id="SelectResponsable">
+            {responsables.map((responsable) => (
+              <option key={responsable._id} value={responsable._id}>{responsable}</option>
             ))}
-          </tbody>
-        </table>
+          </select>
+          <select name="Ubicacion" className='Selector' id="SelectArea">
+            {ubicaciones.map((Ubicacion) => (
+              <option value={Ubicacion.id}>{Ubicacion}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <table id='TableProducts'>
+            <thead>
+              <tr>
+                <th data-titulo='Idetificador'>Idetificador</th>
+                <th data-titulo='Descripción'>Descripción</th>
+                <th data-titulo='Costo'>Costo</th>
+                <th data-titulo='Marca'>Marca</th>
+                <th data-titulo='Recurso'>Recurso</th>
+                <th data-titulo='Resposable'>Resposable Actual</th>
+                <th data-titulo='Ubicación'>Ubicación</th>
+                <th data-titulo='Acciones'>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {productos.map((producto) => (
+                <tr key={producto._id}>
+                  <td data-titulo='Idetificador'>{producto.asignado}-{producto.cve_cabms}-{producto.consecutivo}</td>
+                  <td data-titulo='Descripción'>{producto.descrip_bm}</td>
+                  <td data-titulo='Costo'>{producto.costo_bien}</td>
+                  <td data-titulo='Marca'>{producto.marca}</td>
+                  <td data-titulo='Recurso'>{producto.recursos}</td>
+                  <td data-titulo='Resposable'>{producto.responsable}</td>
+                  <td data-titulo='Ubicación'>{producto.ubicacion}</td>
+                  <td data-titulo='Acciones' id='tdAcciones'><button onClick={() => deleteProduct(producto._id)} id='ReportsDelete'>Eliminar</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <button id='btn_Excel' onClick={GenerarExcel}>Exportar a Excel</button>
+        </div>
       </div>
-      <div>
-        <button id='btn_Excel' onClick={GenerarExcel}>Exportar a Excel</button>
-      </div>
-    </div>
     </>
-    
+
   )
 }
