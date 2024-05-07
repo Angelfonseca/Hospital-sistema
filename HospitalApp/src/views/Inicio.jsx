@@ -2,6 +2,9 @@
 import add from "/src/assets/add.png"
 import edit from "/src/assets/edit.png"
 import inventory from "/src/assets/inventory.png"
+import responsable from "/src/assets/Responsable.png"
+
+
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {Toaster, toast} from 'sonner'
@@ -69,7 +72,7 @@ export default function Inicio() {
         </div>
         <div className="ConInicio_4">
           <Link to={"/responsable"}>
-            <img src={add} alt="Imagen Añadir" id="InicioImg" />
+            <img src={responsable} alt="Imagen Responsable" id="InicioImg" />
             <p>Responsable</p>
           </Link>
         </div>

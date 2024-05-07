@@ -17,6 +17,24 @@ export default function Reponsable() {
     ObtenerResponsables()
   }, [])
 
+  const GenerarExcelResponsable = async (e) => {
+    e.preventDefault();
+    try {
+      var respons = SelectorResponable_Excel.value
+      //Petición para enviar los codigos y obtener el archivo Excel
+      const respuesta = await clienteAxios.get(`/api/objects/responsable/${respons}`, { responseType: 'blob' });
+
+      //Descargar archivo Excel
+      const blob = new Blob([respuesta.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      FileSaver.saveAs(blob, `${respons}_Reporte.xlsx`);
+
+      toast.success('Excel generado correctamente')
+    } catch (error) {
+      console.log(error)
+      toast.error('Error al generar el Excel') 
+    }
+
+  }
 
   return (
     <div className='ContainerFull_Responsable'>
@@ -41,7 +59,7 @@ export default function Reponsable() {
                 <option key={responsable._id} value={responsable._id}>{responsable}</option>
               ))}
             </select>
-            <button type='submit' id='btnResp_GenerarResp'>Generar Excel del Responsable</button>
+            <button type='submit' id='btnResp_GenerarResp' onClick={GenerarExcelResponsable}>Generar Excel del Responsable</button>
           </div>
 
         </div>
