@@ -186,41 +186,41 @@ export default function Editar() {
           <div>
             <div>
               <p id='Edit_Font18'>Asignado:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Asignado de HPGA' value={asignado} onChange={(e) => setAsignado(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Asignado de HPGA' value={asignado} onChange={(e) => setAsignado(e.target.value)} required/>
             </div>
             <div>
               <p id='Edit_Font18'>Clave Cabms:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Clave Cabms (Nombre)' value={cve_cabms} onChange={(e) => setClave(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Clave Cabms (Nombre)' value={cve_cabms} onChange={(e) => setClave(e.target.value)} required/>
             </div>
             <div>
               <p id='Edit_Font18'>Cosecutivo:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Consecutivo (Apellido)' value={consecutivo} onChange={(e) => setConsecutivo(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Consecutivo (Apellido)' value={consecutivo} onChange={(e) => setConsecutivo(e.target.value)} required/>
             </div>
           </div>
 
           <div>
             <div>
               <p id='Edit_Font18'>Descripción:</p>
-              <input type="text" name="" id="Input_EditDesc_Pro" placeholder='Descripción detallada del producto' value={descrip_bm} onChange={(e) => setDescripcionBm(e.target.value)} />
+              <input type="text" name="" id="Input_EditDesc_Pro" placeholder='Descripción detallada del producto' value={descrip_bm} onChange={(e) => setDescripcionBm(e.target.value)} required/>
             </div>
             <div>
               <p id='Edit_Font18'>Costo:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Valor del bien' value={costo_bien} onChange={(e) => setCosto(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Valor del bien' value={costo_bien} onChange={(e) => setCosto(e.target.value)} required/>
             </div>
           </div>
 
           <div>
             <div>
               <p id='Edit_Font18'>Marca:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Marca' value={marca} onChange={(e) => setMarca(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Marca' value={marca} onChange={(e) => setMarca(e.target.value)} required/>
             </div>
             <div>
               <p id='Edit_Font18'>Modelo:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Modelo' value={modelo} onChange={(e) => setModelo(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Modelo' value={modelo} onChange={(e) => setModelo(e.target.value)} required/>
             </div>
             <div>
               <p id='Edit_Font18'>Serie:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Serie' value={serie} onChange={(e) => setSerie(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Serie' value={serie} onChange={(e) => setSerie(e.target.value)} required/>
             </div>
           </div>
 
@@ -232,18 +232,18 @@ export default function Editar() {
             </div>
             <div>
               <p id='Edit_Font18'>Recurso:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Recurso' value={recursos} onChange={(e) => setRecurso(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Recurso' value={recursos} onChange={(e) => setRecurso(e.target.value)} required/>
             </div>
             <div>
               <p id='Edit_Font18'>Responsable:</p>
-              <input type="text" id='Inputs_Edit_Pro' placeholder='Responsable' value={responsable} onChange={(e) => setResponsable(e.target.value)} />
+              <input type="text" id='Inputs_Edit_Pro' placeholder='Responsable' value={responsable} onChange={(e) => setResponsable(e.target.value)} required/>
             </div>
           </div>
 
           <div>
             <div>
               <p id='Edit_Font18'>Área o Ubicación</p>
-              <input type="text" id="Inputs_Edit_Pro" placeholder='Área-Ubicación del bien' value={ubicacion} onChange={(e) => setArea(e.target.value)} />
+              <input type="text" id="Inputs_Edit_Pro" placeholder='Área-Ubicación del bien' value={ubicacion} onChange={(e) => setArea(e.target.value)} required/>
             </div>
             <div className='Con_Check'>
               <label htmlFor="CB_Consumible">¿Es un consumible?</label>

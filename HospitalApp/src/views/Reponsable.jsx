@@ -3,9 +3,23 @@ import { Toaster, toast } from 'sonner'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import clienteAxios from '/src/config/axios';
+import { useNavigate } from 'react-router-dom';
+
+//Import FileSaver para descargar archivos
+import FileSaver from 'file-saver';
 
 export default function Reponsable() {
   var [responsables, setResponsables] = useState([]);
+
+  const Navegacion = useNavigate() //Variable para usar la navegación
+
+  //Función para verificar si el usuario está autenticado
+  function islogged() {
+    const token = localStorage.getItem('AUTH TOKEN')
+    if (token === null) {
+      Navegacion('/auth')
+    }
+  }
 
   //Obtener Responsables
   const ObtenerResponsables = async () => {
@@ -14,19 +28,35 @@ export default function Reponsable() {
   }
 
   useEffect(() => {
+    islogged();
     ObtenerResponsables()
   }, [])
 
   const GenerarExcelResponsable = async (e) => {
     e.preventDefault();
     try {
+
+      // Variable DESCARTADA, generaba problemas con la letra "ñ" y acentos
+      //var respons = SelectorResponable_Excel.value.replace(/\s/g, "%20").replace(/\s*\([^)]*\)/, '') //Variable Nombre Responsable (Sin Espacios y sin parentesis)
+
+      //Variable Nombre Responsable
       var respons = SelectorResponable_Excel.value
+
+      //Variable para dividir el nombre del responsable y obtener solo el nombre
+      let partes = respons.split(" ");
+      let NombreResp = partes.slice(0, 3).join(" ");
+
+      var NombreGuion = respons.replace(/\s/g, "_")
+      NombreResp = NombreResp.replace(/\s/g, "%20")
+
+      console.log(NombreResp)
+
       //Petición para enviar los codigos y obtener el archivo Excel
-      const respuesta = await clienteAxios.get(`/api/objects/responsable/${respons}`, { responseType: 'blob' });
+      const respuesta = await clienteAxios.get(`/api/objects/xlsx/${NombreResp}`, { responseType: 'blob' });
 
       //Descargar archivo Excel
       const blob = new Blob([respuesta.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      FileSaver.saveAs(blob, `${respons}_Reporte.xlsx`);
+      FileSaver.saveAs(blob, `${NombreGuion}_Reporte.xlsx`);
 
       toast.success('Excel generado correctamente')
     } catch (error) {
