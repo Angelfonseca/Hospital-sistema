@@ -20,7 +20,6 @@ const createObject = async (req: Request, res: Response) => {
     res.status(201).json(newObject);
   } catch (error: any) {
     handleHttp(res, error, "Error creating object");
-    return new Error;
   }
 };
 

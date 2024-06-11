@@ -4,6 +4,7 @@ import ObjectModel from "../models/object.model";
 import * as XLSX from 'xlsx';
 const path = require('path');
 import mongoose from 'mongoose';
+import { get } from "http";
 
 
 
@@ -14,6 +15,11 @@ const getObjects = async () => {
 };
 const createObject = async (object: Object) => {
   const objectData = await ObjectModel.create(object)
+  const objectCode = `${objectData.asignado}-${objectData.cve_cabms}-${objectData.consecutivo}`;
+  const check = await getObjectbyCode(objectCode);
+  if(check.length > 1){
+    throw { status: 409, message: 'Error: El objeto ya existe!' };
+  }
   return objectData;
 }
 const getObject = async (id: string) => {
@@ -222,6 +228,7 @@ const getObjectbyCode = async (code: string) => {
     const div1 = code.split('-')[1];
     const div2 = code.split('-')[2];
     const objects = await ObjectModel.find({ cve_cabms: div1, consecutivo: div2 });
+    if (!objects) console.log("objeto no encontrado")
     return objects;
   } catch (error) {
     console.error('Error searching for objects:', error);

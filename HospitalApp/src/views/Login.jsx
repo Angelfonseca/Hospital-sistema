@@ -40,7 +40,7 @@ export default function Login() {
     // Función de login
     try {
       const { data } = await clienteAxios.post("/api/users/auth/login", datos); // Petición a la API
-      localStorage.setItem("AUTH TOKEN", data.token); // Guardar token en localstorage
+      localStorage.setItem("AUTH TOKEN", data.token); // Guardar token en el local storage
       Navegacion("/"); // Redirigir a la página principal
     } catch (error) {
       toast.error(error.response.data.error);
