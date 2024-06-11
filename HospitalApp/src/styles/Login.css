@@ -107,10 +107,11 @@ html{
 /* ========== Desktop ========== */
 @media (min-width: 900px) {
     #DoctorSVG{
-        width: 400px;
-        height: 400px;
+        width: 70%;
+        height: 70%;
+
+        margin: 15px;
     }
-    
     
     /*===== Contenedor Completo Login =====*/
     
@@ -140,8 +141,9 @@ html{
         background-color: white;
         border-radius: 10px;
     
-        width: calc(100% - 300px);
+        width: min-content;
         height: fit-content;
+        padding: 10px;
     
         display: flex;
         flex-direction: column;

@@ -52,25 +52,25 @@ export default function Inicio() {
         <button id="BtnSalir" onClick={salir}>Salir</button>
       </div>
       <div className="Con_Inicio">
-        <div className="ConInicio_1">
+        <div>
           <Link to={"/reportes"}>
             <img src={inventory} alt="Imagen Inventario" id="InicioImg" />
             <p>Reportes</p>
           </Link>
         </div>
-        <div className="ConInicio_2">
+        <div>
           <Link to={"/editar"}>
             <img src={edit} alt="Imagen Editar" id="InicioImg" />
             <p>Editar</p>
           </Link>
         </div>
-        <div className="ConInicio_3">
+        <div>
           <Link to={"/añadir"}>
             <img src={add} alt="Imagen Añadir" id="InicioImg" />
             <p>Añadir</p>
           </Link>
         </div>
-        <div className="ConInicio_4">
+        <div>
           <Link to={"/responsable"}>
             <img src={responsable} alt="Imagen Responsable" id="InicioImg" />
             <p>Responsable</p>
