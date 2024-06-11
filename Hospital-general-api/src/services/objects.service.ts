@@ -228,7 +228,7 @@ const getObjectbyCode = async (code: string) => {
     const div1 = code.split('-')[1];
     const div2 = code.split('-')[2];
     const objects = await ObjectModel.find({ cve_cabms: div1, consecutivo: div2 });
-    if (!objects) console.log("objeto no encontrado")
+    if (objects.length !== 1) throw { status: 409, message: 'Error: El objeto no existe!' }
     return objects;
   } catch (error) {
     console.error('Error searching for objects:', error);
