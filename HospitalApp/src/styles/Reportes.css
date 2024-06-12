@@ -1,315 +1,312 @@
 /* ========== Movil ============ */
 
 /* Contenedor completo de los reportes */
-.Container_Reports{
-    display: flex;
-    flex-direction: column;
+.Container_Reports {
+  display: flex;
+  flex-direction: column;
 
-    justify-content: center;
-    width: 98%;
-    
-    margin: auto;
-    margin-top: 30px;
+  justify-content: center;
+  width: 98%;
+
+  margin: auto;
+  margin-top: 30px;
 }
 
 /* Primer Contenedor */
-.Container_Reports > div:nth-child(1){
-    height: calc(5% + auto);
+.Container_Reports > div:nth-child(1) {
+  height: calc(5% + auto);
 
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 /* Botón de regresar */
-#btnRegresarRep{
-    width: 100px;
-    height: 40px;
+#btnRegresarRep {
+  width: 100px;
+  height: 40px;
 
-    background-color: #6C757D;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 20px;
-    color: white;
+  background-color: #6c757d;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
 }
 
 /* Segundo Contenedor */
-.Container_Reports > div:nth-child(2){
-    height: 10%;
+.Container_Reports > div:nth-child(2) {
+  height: 10%;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 
-    color: black;
-    gap: 10px;
+  color: black;
+  gap: 10px;
 
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 /* Input de búsqueda */
-#SearchID{
-    width: 100%;
-    height: 40px;
-    border: 1px #ADB5BD solid;
-    border-radius: 5px;
-    font-size: 20px;
+#SearchID {
+  width: 100%;
+  height: 40px;
+  border: 1px #adb5bd solid;
+  border-radius: 5px;
+  font-size: 20px;
 }
 
 /* Select de grupo */
-.Selector{
-    width: 100%;
-    height: 40px;
-    border: 1px #ADB5BD solid;
-    border-radius: 5px;
-    font-size: 20px;
+.Selector {
+  width: 100%;
+  height: 40px;
+  border: 1px #adb5bd solid;
+  border-radius: 5px;
+  font-size: 20px;
 }
 
 /* Tercer Contenedor */
-.Container_Reports > div:nth-child(3){
-    height: 75%;
-    overflow: auto;
-    margin-bottom: 10px;
+.Container_Reports > div:nth-child(3) {
+  height: 75%;
+  overflow: auto;
+  margin-bottom: 10px;
 
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 /* Tabla y todos sus atributos */
-#TableProducts{
-    width: 100%;
-    text-align: left;
-    background-color: #039497;
-    border-color: blue;
-    overflow: auto;
+#TableProducts {
+  width: 100%;
+  text-align: left;
+  background-color: #039497;
+  border-color: blue;
+  overflow: auto;
 }
 
-#TableProducts tr{
-    width: 100%;
+#TableProducts tr {
+  width: 100%;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    border: 1px solid black;
+  border: 1px solid black;
 
-    margin-bottom: 10px;
-    background-color: white;
+  margin-bottom: 10px;
+  background-color: white;
 }
 
-thead{
-    display: none;
-}	
-
-tbody{
-    text-align: left;
-    height: 100%;
-    font-size: 20px;
-    font-weight: 300;
+thead {
+  display: none;
 }
 
-#TableProducts td[data-titulo]{
-    display: flex;
-    margin: 10px;
+tbody {
+  text-align: left;
+  height: 100%;
+  font-size: 20px;
+  font-weight: 300;
 }
 
-#TableProducts td[data-titulo]::before{
-    content: attr(data-titulo);
-    font-size: 24px;
-    font-weight: 500;
-    width: 150px
+#TableProducts td[data-titulo] {
+  display: flex;
+  margin: 10px;
+}
+
+#TableProducts td[data-titulo]::before {
+  content: attr(data-titulo);
+  font-size: 24px;
+  font-weight: 500;
+  width: 150px;
 }
 
 /* Cuarto Contenedor */
-.Container_Reports > div:nth-child(4){
-    height: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.Container_Reports > div:nth-child(4) {
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
-#btn_Excel{
-    width: 250px;
-    height: 40px;
+#btn_Excel {
+  width: 250px;
+  height: 40px;
 
-    background-color: #28A745;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 20px;
-    color: white;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
 }
 
-#tdAcciones{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+#tdAcciones {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Button Delete Product */
-#ReportsDelete{
-    width: 100px;
-    height: 40px;
+#ReportsDelete {
+  width: 100px;
+  height: 40px;
 
-    background-color: #DC3545;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 20px;
-    color: white;
-    margin-left: 10px;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  margin-left: 10px;
 }
 
 /* ========== Desktop ========== */
 @media (min-width: 900px) {
+  /* Contenedor completo de los reportes */
+  .Container_Reports {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 150vh;
 
-    /* Contenedor completo de los reportes */
-    .Container_Reports {
-        display: flex;
-        justify-content: center;
-        height: 100%;
-        width: 150vh;
+    margin: 0px;
+  }
 
-        margin: 0px;
-    }
+  /* Primer Contenedor */
+  .Container_Reports > div:nth-child(1) {
+    height: calc(5% + auto);
+  }
 
-    /* Primer Contenedor */
-    .Container_Reports>div:nth-child(1) {
-        height: calc(5% + auto);
-    }
+  /* Botón de regresar */
+  #btnRegresarRep {
+    width: 100px;
+    height: 40px;
 
-    /* Botón de regresar */
-    #btnRegresarRep {
-        width: 100px;
-        height: 40px;
+    background-color: #6c757d;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+  }
 
-        background-color: #6C757D;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 20px;
-        color: white;
-    }
+  /* Segundo Contenedor */
+  .Container_Reports > div:nth-child(2) {
+    height: 10%;
 
-    /* Segundo Contenedor */
-    .Container_Reports>div:nth-child(2) {
-        height: 10%;
+    display: flex;
+    flex-direction: row;
 
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
+    color: black;
+    gap: 10px;
+  }
 
-        color: black;
-        gap: 10px;
-    }
+  /* Input de búsqueda */
+  #SearchID {
+    width: 55%;
+    height: 40px;
+    border: 1px #adb5bd solid;
+    border-radius: 5px;
+    font-size: 20px;
+  }
 
-    /* Input de búsqueda */
-    #SearchID {
-        width: 74%;
-        height: 40px;
-        border: 1px #ADB5BD solid;
-        border-radius: 5px;
-        font-size: 20px;
-    }
+  /* Select de grupo */
+  .Selector {
+    height: 40px;
+    border: 1px #adb5bd solid;
+    border-radius: 5px;
+    font-size: 20px;
+  }
 
-    /* Select de grupo */
-    .Selector {
-        width: 24%;
-        height: 40px;
-        border: 1px #ADB5BD solid;
-        border-radius: 5px;
-        font-size: 20px;
-    }
+  /* Tercer Contenedor */
+  .Container_Reports > div:nth-child(3) {
+    height: 70%;
+    overflow: auto;
+  }
 
-    /* Tercer Contenedor */
-    .Container_Reports>div:nth-child(3) {
-        height: 70%;
-        overflow: auto;
-    }
+  /* Tabla y todos sus atributos */
+  #TableProducts {
+    text-align: left;
+    width: 100%;
+    background-color: #039497;
+    border-color: blue;
+    overflow: auto;
+  }
 
+  #TableProducts tr {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border: 0px;
+    border-bottom: 1px solid #039497;
 
-    /* Tabla y todos sus atributos */
-    #TableProducts {
-        text-align: left;
-        width: 100%;
-        background-color: #039497;
-        border-color: blue;
-        overflow: auto;
-    }
+    margin-bottom: 0px;
+  }
 
-    #TableProducts tr {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        border: 0px;
-        border-bottom: 1px solid #039497;
-        
-        margin-bottom: 0px;
-    }
+  #TableProducts th {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 
-    #TableProducts th {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-    }
+    font-size: 20px;
+  }
 
-    #TableProducts td {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        font-size: 24px;
-    }
+  #TableProducts td {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    font-size: 18px;
+    align-items: center;
+    text-align: center;
+  }
 
-    #TableProducts > tbody tr:nth-of-type(even){
-        background-color: lightgray;
-    }
+  #TableProducts > tbody tr:nth-of-type(even) {
+    background-color: lightgray;
+  }
 
-    thead {
-        display: flex;
-        background-color: white;
-        color: black;
-        width: 100%;
-        text-align: center;
-    }
+  thead {
+    display: flex;
+    background-color: white;
+    color: black;
+    width: 100%;
+    text-align: center;
+  }
 
-    thead th{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+  thead th {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    tbody {
-        background-color: white;
-        text-align: left;
-        height: 100%;
-        font-size: 20px;
-        font-weight: 300;
-        width: 100%;
-    }
+  tbody {
+    background-color: white;
+    text-align: left;
+    height: 100%;
+    font-size: 20px;
+    font-weight: 300;
+    width: 100%;
+  }
 
-    
-    #TableProducts td[data-titulo]::before{
-        display: none;
-    }
+  #TableProducts td[data-titulo]::before {
+    display: none;
+  }
 
-    /* Cuarto Contenedor */
-    .Container_Reports>div:nth-child(4) {
-        height: 5%;
-    }
+  /* Cuarto Contenedor */
+  .Container_Reports > div:nth-child(4) {
+    height: 5%;
+  }
 
-    #btn_Excel {
-        width: 250px;
-        height: 40px;
+  #btn_Excel {
+    width: 250px;
+    height: 40px;
 
-        background-color: #28A745;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 20px;
-        color: white;
-    }
-
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+  }
 }

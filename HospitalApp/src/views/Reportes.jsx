@@ -215,6 +215,7 @@ export default function Reportes() {
         </div>
         <div>
           <input
+            autoFocus
             type="search"
             name="SearchID"
             id="SearchID"

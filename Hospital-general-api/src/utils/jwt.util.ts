@@ -1,20 +1,20 @@
-import 'dotenv/config'
-import jwt from 'jwt-simple'
-import moment from 'moment'
-const secret = process.env.SECRET_JWT || ''
+import "dotenv/config";
+import jwt from "jwt-simple";
+import moment from "moment";
+const secret = process.env.SECRET_JWT || "";
 
 const createToken = (obj: any) => {
   let payload = {
     id: obj.id,
     username: obj.username,
     iat: moment().unix(),
-    exp: moment().add(30, 'minutes').unix()
-  }
-  return jwt.encode(payload, secret)
-}
+    exp: moment().add(4, "hours").unix(),
+  };
+  return jwt.encode(payload, secret);
+};
 
 const jwtMethods = {
-  createToken
-}
+  createToken,
+};
 
-export default jwtMethods
+export default jwtMethods;
